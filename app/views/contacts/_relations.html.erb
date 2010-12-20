@@ -1,0 +1,13 @@
+<% relations.each do |contact| %>
+<table class="note_data">
+	<tr>
+		<td class="avatar"><%= link_to avatar_to(contact, :size => "32"), {:controller => 'contacts', :action => 'show', :project_id => contact.project, :id => contact.id}, :id => "avatar" %></td>
+		<td class="name" style="vertical-align: top;">
+			<h4>
+				<%= link_to contact.name, {:controller => 'contacts', :action => 'show', :project_id => contact.project, :id => contact.id } %>
+			</h4>
+			<%= contact.job_title %>
+		</td>
+	</tr>
+</table>
+<% end %> 

@@ -1,0 +1,31 @@
+<% unless @deals.empty? %>
+	<table class="index">
+	<tbody>
+    <% @deals.each do |deal| %>
+		<tr>
+			<td>
+				<div class="avatar_subject">
+					<%= link_to avatar_to(deal, :size => "32"), {:controller => 'deals', :action => 'show', :project_id => deal.project, :id => deal.id}, :id => "avatar" %>
+					<div class="info">
+						<h1 class="deal_name"><%= link_to deal.name, :controller => 'deals', :action => 'show', :project_id => deal.project, :id => deal.id %></h1>
+						<h2>
+							<%= link_to_contact(deal.contacts.first) if deal.contacts.any? %>    
+							
+						</h2>
+					</div>
+				</div>
+			</td>         
+			
+			<td > 
+				<p><strong><%= h number_to_currency(deal.price) %></strong> </p>
+				<div class="description" >   
+					<%= h truncate(deal.background, 200) %>
+				</div>
+			</td>
+		</tr>
+    <% end %>
+	</tbody>
+  </table>
+<% else %>
+  <p class="nodata"><%=l(:label_no_data)%></p>
+<% end %>

@@ -1,0 +1,8 @@
+<% unless @notes.empty? %>   
+	<% @notes.each do |note| %>   
+		<%= render :partial => 'notes/note_data', :locals => {:limit => 1000}, :object => note %> 
+	<% end %>
+	<p class="pagination"><%= link_to l(:label_previous), { :page => @notes_pages.current.previous } if @notes_pages.current.previous %>  <%= pagination_links @notes_pages, :params => {:project_id => params[:project_id]}%> <%= link_to l(:label_next), { :page => @notes_pages.current.next } if @notes_pages.current.next %> </p>   
+<% else %>
+  <p class="nodata"><%=l(:label_no_data)%></p>
+<% end %>

@@ -1,0 +1,12 @@
+# page.replace_html(:comments, :partial => 'notes', :object => @contact.comments)
+page[:add_note_form].reset
+# page.replace_html :add_comment_form, 'Жопа'
+
+if @contact.notes.first != @note
+  page.insert_html :after, "note_#{@contact.notes[@contact.notes.index(@note) - 1].id}", :partial => 'note_item', :object => @note
+else
+  page.insert_html :top, "notes", :partial => 'note_item', :object => @note
+end  
+page["note_#{@note.id}"].visual_effect :highlight
+flash.discard
+
