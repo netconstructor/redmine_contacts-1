@@ -94,19 +94,18 @@ div.live_search input {
 .tags a img { white-space: nowrap; vertical-align: bottom;}
 
 span.tag a {
-	background-color: rgb(200, 120, 0);
-	color: white;
-	padding: 3px 4px;
-	font-size: 10px;
+  background-color: #E1FFD1;
+  border: 1px solid #C5F8AC;
+  border-radius: 5px;
+	padding: 3px;
+	color: #060;
 	/*	display: block;*/
 	white-space: nowrap;
 	line-height:  2em;
 }
 
 span.tag a:hover {
-	background-color: silver;
-	text-decoration: none;
-	color: black;
+  text-decoration: underline;
 }
 div#tags_data span.contextual {float: none; padding-left: 0px;}
 

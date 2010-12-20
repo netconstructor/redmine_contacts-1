@@ -1,8 +1,8 @@
 <div class="contextual">     
 	<% replace_watcher ||= 'watcher' %> 
 	<%= watcher_tag(@contact, User.current, {:id => replace_watcher, :replace => ['watcher','watcher2']}) %>  
-	<%= link_to_if_authorized l(:button_edit), {:controller => 'contacts', :action => 'edit', :project_id => @contact.project, :id => @contact}, :class => 'icon icon-edit' unless @contact.nil? %>
-	<%= link_to_if_authorized l(:button_delete), {:controller => 'contacts', :action => 'destroy', :project_id => @contact.project, :id => @contact}, :confirm => l(:text_are_you_sure), :method => :post, :class => 'icon icon-del' unless @contact.nil? %>
+	<%= link_to_if_logged_in l(:button_edit), {:controller => 'contacts', :action => 'edit', :id => @contact}, :class => 'icon icon-edit' unless @contact.nil? %>
+	<%= link_to_if_logged_in l(:button_delete), {:controller => 'contacts', :action => 'destroy', :id => @contact}, :confirm => l(:text_are_you_sure), :method => :post, :class => 'icon icon-del' unless @contact.nil? %>
 </div>
 
 <h2><%= if !@contact.is_company then l(:label_contact) else l(:label_company) end %> #<%= @contact.id %></h2>
@@ -41,7 +41,7 @@
 						     :multipart => true, 
 							 :id => "edit_tags_form", 
 							 :style => "display:none; size: 100%" ) do %>
-					<%= text_field :contact, :tag_names, :size => 50, :label => :tag_names  %>
+					<%= text_field :contact, :tag_list, :size => 50, :label => :tag_names  %>
 					<%= submit_tag l(:button_save) %>
 					<%= link_to l(:button_cancel), {}, :onclick => "Element.hide('edit_tags_form'); Element.show('tags_data'); return false;" %>
 					<br>

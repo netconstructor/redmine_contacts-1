@@ -11,7 +11,7 @@ contact_two:
     middle_name: Ivanovich
     job_title: director
     company: Domoway
-    tag_names: 'one, two, three, four'
+    tag_list: 'one, two, three, four'
     email: marat@mail.ru
     skype: marat_aminov
     notes: Marat is a famous writer an reader

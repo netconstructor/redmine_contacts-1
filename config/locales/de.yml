@@ -1,6 +1,7 @@
 de:
   contacts_title: Kontakte
 
+  field_contact: Client
   label_contacts_view_all: Alle Kontakte anzeigen
   label_contact_files: Dateien
   label_task_plural: Aufgaben

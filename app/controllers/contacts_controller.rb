@@ -5,12 +5,11 @@ class ContactsController < ApplicationController
   
   default_search_scope :contacts    
   
-  before_filter :find_project, :authorize, :except => [:index, :live_search, :contacts_notes, :contacts_issues, :destroy_note, :close_issue, :assigned_to_users]
+  before_filter :authorize_global, :except => [:index, :live_search, :contacts_notes, :contacts_issues, :destroy_note, :close_issue, :assigned_to_users]
   before_filter :find_contact, :except => [:index, :new, :create, :live_search, :contacts_notes, :close_issue, :contacts_issues, :destroy_note, :add_contact_to_issue]
-  before_filter :find_optional_project, :only => [:index, :live_search, :contacts_notes, :contacts_issues, :destroy_note, :close_issue, :assigned_to_users]
  
   helper :attachments
-  helper :contacts  
+  helper :contacts
   helper :watchers
   include WatchersHelper
   
@@ -51,7 +50,7 @@ class ContactsController < ApplicationController
   def index    
     if !request.xhr?
       last_notes
-      find_tags       
+      find_tags      
     end
     find_contacts
     @contacts.sort! {|x, y| x.name <=> y.name }     
@@ -84,11 +83,10 @@ class ContactsController < ApplicationController
            attach_files(@contact, {"1" => params[:contact_avatar]}) 
          end
         
-        
       end
-      redirect_to :action => "show", :project_id => params[:project_id], :id => @contact
+      redirect_to :action => "show", :id => @contact
     else
-      render "edit", :project_id => params[:project_id], :id => @contact  
+      render "edit", :id => @contact  
     end
   end
 
@@ -99,7 +97,7 @@ class ContactsController < ApplicationController
     else
       flash[:error] = l(:notice_unsuccessful_save)
     end
-    redirect_to :action => "index", :project_id => params[:project_id]
+    redirect_to :action => "index"
   end
   
   def new
@@ -108,7 +106,6 @@ class ContactsController < ApplicationController
 
   def create
     contact = Contact.new(params[:contact])
-    contact.project = @project 
     contact.author = User.current
     if contact.save
       flash[:notice] = l(:notice_successful_create)
@@ -121,9 +118,9 @@ class ContactsController < ApplicationController
         end
       end
       
-      redirect_to :action => "show", :project_id => params[:project_id], :id => contact
+      redirect_to :action => "show", :id => contact
     else
-      render "new", :project_id => params[:project_id], :id => @contact  
+      render "new", :id => @contact  
     end
   end
 
@@ -132,14 +129,16 @@ class ContactsController < ApplicationController
     @contact.update_attributes(params[:contact])
     respond_to do |format|
       format.js if request.xhr?
-      format.html {redirect_to :action => 'show', :id => @contact, :project_id => @project}
+      format.html {redirect_to :action => 'show', :id => @contact }
     end
   end
   
   def add_task
+    find_optional_project
+    
     issue = Issue.new
     issue.subject = params[:task_subject]
-    issue.project = @project
+    issue.project = @project if @project
     issue.tracker_id = params[:task_tracker]
     issue.author = User.current
     issue.due_date = params[:due_date]
@@ -150,10 +149,10 @@ class ContactsController < ApplicationController
       flash[:notice] = l(:notice_successful_add)
       @contact.issues << issue
       @contact.save
-      redirect_to :action => 'show', :id =>  params[:id], :project_id => params[:project_id]
+      redirect_to :action => 'show', :id =>  params[:id]
       return
     else
-      redirect_to :action => 'show', :id =>  params[:id], :project_id => params[:project_id] 
+      redirect_to :action => 'show', :id =>  params[:id]
     end           
   end   
   
@@ -353,17 +352,8 @@ private
   #   render_404
   end
   
-  def find_tags     
-    # TODO Crapy code
-    cond = "1 = 1"
-    cond << " and project_id = #{@project.id}" if @project
-    @tags = Tag.find(:all, 
-                     :conditions => {:id => Tagging.find(:all, 
-                                                         :conditions => {:container_type => 'Contact', 
-                                                                         :container_id => Contact.visible.find(:all, 
-                                                                                                        :conditions => cond).map(&:id)}
-                                                         ).map(&:tag_id)},
-                     :limit => 40)
+  def find_tags
+    @tags = Contact.tag_counts
   end
   
   def find_employees
@@ -393,20 +383,18 @@ private
     @deals = Deal.visible.find(:all, :conditions => cond) || []
   end
   
-  def find_contacts(pages=true)            
-    cond = "1 = 1"
-    cond << " and project_id = #{@project.id}" if @project  
-    cond << " and job_title = '#{params[:job_title]}'" if !params[:job_title].blank?
-    if params[:tag]      
+  def find_contacts(pages=true)
+    cond = "1 AND 1"          
+    if params[:tag]
       @tag = Tag.find_by_name(params[:tag])
       if @tag     
         if pages
-          @contacts_pages = Paginator.new self, @tag.contacts.visible.count(:conditions => cond), 20, params[:page]     
-          @contacts = @tag.contacts.visible.find(:all, :conditions => cond, :order => "last_name, first_name",
+          @contacts_pages = Paginator.new self, Contact.find_tagged_with(@tag).count, 20, params[:page]     
+          @contacts = Contact.find_tagged_with(@tag, :order => "last_name, first_name",
                                          :limit  =>  @contacts_pages.items_per_page,
                                          :offset =>  @contacts_pages.current.offset) || []
         else
-          @contacts = @tag.contacts.visible.find(:all, :conditions => cond, :order => "last_name, first_name") || []
+          @contacts = Contact.find_tagged_with(@tag, :order => "last_name, first_name") || []
         end
       end
     else      
@@ -414,12 +402,12 @@ private
         cond << " and (first_name LIKE '%#{params[:search]}%' or last_name LIKE '%#{params[:search]}%' or middle_name LIKE '%#{params[:search]}%' or company LIKE '%#{params[:search]}%' or job_title LIKE '%#{params[:search]}%')" 
       end 
       if pages  
-        @contacts_pages = Paginator.new self, Contact.visible.count(:conditions => cond), 20, params[:page]     
-        @contacts = Contact.visible.find(:all, :conditions => cond, :order => "last_name, first_name",
+        @contacts_pages = Paginator.new self, Contact.count(:conditions => cond), 20, params[:page]     
+        @contacts = Contact.find(:all, :conditions => cond, :order => "last_name, first_name",
                                   :limit  =>  @contacts_pages.items_per_page,
                                   :offset =>  @contacts_pages.current.offset) || []   
       else     
-        @contacts = Contact.visible.find(:all, :conditions => cond, :order => "last_name, first_name") || []
+        @contacts = Contact.find(:all, :conditions => cond, :order => "last_name, first_name") || []
       end
     end  
   end     
@@ -443,7 +431,6 @@ private
   def find_optional_project
     return true unless params[:project_id]
     @project = Project.find(params[:project_id])
-    authorize
   rescue ActiveRecord::RecordNotFound
     render_404
   end

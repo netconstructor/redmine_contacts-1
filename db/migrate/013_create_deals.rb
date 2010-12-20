@@ -2,9 +2,9 @@ class CreateDeals < ActiveRecord::Migration
   def self.up
     rename_table :customers, :contacts
     
-    Tagging.update_all({:container_type => 'Contact'}, {:container_type => 'Customer'})
-    Comment.update_all({:commented_type => 'Contact'}, {:commented_type => 'Customer'})
-    Attachment.update_all({:container_type => 'Contact'}, {:container_type => 'Customer'})   
+    #Tagging.update_all({:container_type => 'Contact'}, {:container_type => 'Customer'})
+    #Comment.update_all({:commented_type => 'Contact'}, {:commented_type => 'Customer'})
+    #Attachment.update_all({:container_type => 'Contact'}, {:container_type => 'Customer'})   
 
     create_table :deals do |t|
       t.string :name
@@ -44,9 +44,9 @@ class CreateDeals < ActiveRecord::Migration
     
     rename_table :contacts, :customers
     
-    Tagging.update_all({:container_type => 'Customer'}, {:container_type => 'Contact'})
-    Comment.update_all({:commented_type => 'Customer'}, {:commented_type => 'Contact'})
-    Attachment.update_all({:container_type => 'Customer'}, {:container_type => 'Contact'})   
+    #Tagging.update_all({:container_type => 'Customer'}, {:container_type => 'Contact'})
+    #Comment.update_all({:commented_type => 'Customer'}, {:commented_type => 'Contact'})
+    #Attachment.update_all({:container_type => 'Customer'}, {:container_type => 'Contact'})   
     
   end
 end

@@ -1,9 +1,11 @@
+<% if @project%>
 <div class="contextual">
 	<p><%= link_to l(:label_issue_new), {}, :onclick => "Element.show('add_issue'); Element.hide(this);  return false;", :id => 'add_task_link' %></p>
 </div>
 <h3><%= l(:label_issue_plural) %> </h3>   
 
 <%= error_messages_for 'issue' %>    
+
 
 <div id="add_issue" style="display:none;"> 
 	   	<% form_tag({ :controller => 'contacts', :action => 'add_task', :project_id => @project, :id => @contact}, :multipart => true, :id => "add_task_form") do %> 
@@ -34,7 +36,8 @@
 		<%= link_to l(:button_cancel), {}, :onclick => "Element.hide('add_issue'); Element.show('add_task_link'); return false;" %>
 		
 	<% end %>
-</div>        
+</div>     
+<% end%>   
 
 
 <div id="contact_issues">

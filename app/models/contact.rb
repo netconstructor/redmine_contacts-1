@@ -1,20 +1,18 @@
 class Contact < ActiveRecord::Base
-  unloadable  
-  belongs_to :project
-  has_many :notes, :as => :source, :dependent => :delete_all, :order => "created_on DESC"
-  has_many :tags, :through => :taggings, :uniq => true
-  has_many :taggings, :dependent => :destroy, :as => :container    
+  unloadable
+  
+  require 'acts_as_taggable'
+  acts_as_taggable
+  
+  has_many :projects
+  has_many :notes, :as => :source, :dependent => :delete_all, :order => "created_on DESC" 
   belongs_to :assigned_to, :class_name => 'User', :foreign_key => 'assigned_to_id'    
   has_and_belongs_to_many :issues, :order => "#{Issue.table_name}.due_date", :uniq => true   
   has_and_belongs_to_many :deals
   belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
   
-  attr_accessor :tag_names 
   attr_accessor :phones     
   attr_accessor :emails 
-  
-  after_save :assign_tags
-  # before_save :assign_phone
   
   acts_as_watchable
 
@@ -31,17 +29,16 @@ class Contact < ActiveRecord::Base
                 :type => Proc.new {|o| 'contact' },  
                 :title => Proc.new {|o| o.name },
                 :description => Proc.new {|o| o.notes }     
-                
-  named_scope :visible, lambda {|*args| { :include => :project,
-                                          :conditions => Project.allowed_to_condition(args.first || User.current, :view_contacts) } }                
-                
-                
+                                
   # name or company is mandatory
   validates_presence_of :first_name 
   validates_uniqueness_of :first_name, :scope => [:last_name, :middle_name, :company]
   
+  validates_format_of :email, :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, 
+    :allow_nil => true, :allow_blank => true
+  
   def visible?(usr=nil)
-    (usr || User.current).allowed_to?(:view_contacts, self.project)
+    (usr || User.current).allowed_to?(:view_contacts, :global)
   end
   
   def name
@@ -53,10 +50,6 @@ class Contact < ActiveRecord::Base
     end    
 
     return result.join(" ")
-  end
-  
-  def tag_names
-    @tag_names || tags.map(&:name).join(', ')
   end
    
   def phones                            
@@ -74,14 +67,6 @@ class Contact < ActiveRecord::Base
     if @phones
       self.phone = @phones.uniq.map {|s| s.strip.delete(',').squeeze(" ")}.join(', ')
     end
-  end 
-    
-  def assign_tags
-    if @tag_names
-      self.tags = @tag_names.mb_chars.downcase.to_s.squeeze(" ").strip.squeeze(",").strip.split( /, */).map { |s| s.strip unless s.blank?}.compact.uniq.map do |name|
-        Tag.find_or_create_by_name(name)
-      end
-    end  
   end
   
 end

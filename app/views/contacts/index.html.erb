@@ -1,6 +1,6 @@
 <% if !@tag %>
 	<div class="contextual">
-	  <%= link_to_if_authorized l(:label_contact_new), {:controller => 'contacts', :action => 'new', :project_id => @project}, :class => 'icon icon-add' %>
+	  <%= link_to l(:label_contact_new), {:controller => 'contacts', :action => 'new' }, :class => 'icon icon-add' %>
 	</div>
 
 	<h2><%=  l(:label_contact_plural) %></h2>
@@ -14,7 +14,7 @@
 			<%= observe_field("search",  
 				:frequency => 1, 
 			    :update => 'contact_list', 
-				:url => {:controller => 'contacts',  :action => 'index', :project_id => @project }, 
+				:url => {:controller => 'contacts',  :action => 'index' }, 
 			    :with => "search") %>
 			
 			

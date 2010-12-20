@@ -1,0 +1,6 @@
+<p>
+	<%= form.select :contact_id, options_for_select(Contact.find(:all).sort!{|x, y| x.name <=> y.name }.collect {|m| [m.name, m.id]}), :required => true, :prompt => "--- #{l(:actionview_instancetag_blank_option)} ---" %>
+</p>
+
+
+

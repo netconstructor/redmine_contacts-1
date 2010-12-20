@@ -1,4 +1,44 @@
 module ContactsHelper
+  
+  def render_project_hierarchy_with_contacts(projects)
+    output = ''
+    if projects.any?
+      contacts = []
+      orphans = []
+      original_project = @project
+      
+      projects.each do |project|
+        # set the project environment to please macros.
+        @project = project
+        if @project.contact.blank?
+          orphans << @project
+        else
+          contacts << @project.contact unless contacts.include? @project.contact
+        end
+      end
+      
+      sorted = contacts.sort_by {|contact| contact.name}
+      
+      output << render_project_hierarchy(orphans)
+      
+      sorted.each do |contact|
+        output << "<h3 class='contacts'>#{contact.name}</h3>"
+        output << render_project_hierarchy(contact.projects)
+      end
+      
+    end
+    @project = original_project
+    output
+  end
+
+  # Display a link if the user is logged in
+  def link_to_if_logged_in(name, options = {}, html_options = nil, *parameters_for_method_reference)
+    link_to(name, options, html_options, *parameters_for_method_reference) if User.current.logged?
+  end
+  
+  def link_to_remote_if_logged_in(name, options = {}, html_options = nil, *parameters_for_method_reference)
+    link_to_remote(name, options, html_options, *parameters_for_method_reference) if User.current.logged?
+  end
 
   def skype_to(skype_name, name = nil)
     return link_to skype_name, 'skype:' + skype_name + '?call' unless skype_name.blank?
@@ -6,8 +46,8 @@ module ContactsHelper
   
   def contacts_paginator(paginator, page_options)
     pagination_links_each(paginator, page_options) do |link|
-        options = { :url => {:controller => 'contacts',  :action => 'live_search', :search => '', :project_id => @project, :params => params.merge({:page => link})}, :update => 'contact_list' }
-        html_options = { :href => url_for(:controller => 'contacts',  :action => 'live_search', :project_id => @project, :params => params.merge({:page => link})) }
+        options = { :url => {:controller => 'contacts',  :action => 'live_search', :search => '', :params => params.merge({:page => link})}, :update => 'contact_list' }
+        html_options = { :href => url_for(:controller => 'contacts',  :action => 'live_search', :params => params.merge({:page => link})) }
         # debugger
         link_to_remote(link.to_s, options)
     end
@@ -31,15 +71,11 @@ module ContactsHelper
     options[:class] = "gravatar"  
     
     avatar = obj.attachments.find_by_description 'avatar'
-    if avatar  then  # and obj.visible?
+    if avatar # and obj.visible?
       image_url = url_for :only_path => false, :controller => 'attachments', :action => 'download', :id => avatar, :filename => avatar.filename
       # image_url = url_for :only_path => false, :controller => 'contacts', :action => 'download_avatar', :id => obj, :filename => avatar.filename
-      
       return image_tag(image_url, options)
-    elseif obj.email.downcase
-      return gravatar(obj.email, options) rescue nil 
     else
-      
       plugins_images  =  "/plugin_assets/redmine_contacts/images/"
       if obj.class == Deal   
         image =  image_tag(plugins_images + "deal.png", options)

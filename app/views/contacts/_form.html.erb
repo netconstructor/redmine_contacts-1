@@ -40,9 +40,9 @@
 	<p><%= f.text_field 'skype_name', :label=>l(:field_contact_skype) -%></p>
 	<p class  = "notes"><%= f.text_area :background , :cols => 80, :rows => 8, :class => 'wiki-edit', :label=>l(:field_contact_background)  %></p>
 	<%= wikitoolbar_for 'contact_background' %>
-	<p><%= f.text_field :tag_names, :label =>l(:field_contact_tag_names), :size => "100%" %></p>  
+	<p><%= f.text_field :tag_list, :label =>l(:field_contact_tag_names), :size => "100%" %></p>  
 
-	<p><%= f.select :assigned_to_id, (@project.assignable_users.collect {|m| [m.name, m.id]}), :include_blank => true, :label => l(:label_assigned_to) %></p> 
+	<p><%= f.select :assigned_to_id, (User.find(:all).collect {|m| [m.name, m.id]}), :include_blank => true, :label => l(:label_assigned_to) %></p> 
 </div>
 
 <% content_for :header_tags do %>

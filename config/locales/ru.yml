@@ -1,6 +1,7 @@
 ru:
   contacts_title: Контакты
   
+  field_contact: Client
   label_contacts_view_all: Все контакты
   label_contact_files: Файлы
   label_task_plural: Задачи
