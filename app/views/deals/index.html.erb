@@ -8,13 +8,13 @@
 <% end %>
 
 <div class="contextual">
-  <%= link_to_if_authorized l(:label_deal_new), {:controller => 'deals', :action => 'new', :project_id => @project}, :class => 'icon icon-add' %>
+  <%= link_to_if_authorized l(:label_deal_new), {:controller => 'deals', :action => 'new'}, :class => 'icon icon-add' %>
 </div>
 
 <h2><%=  l(:label_deal_plural) %></h2>     
 
 <% unless true %>
-<% form_tag({:project_id => @project}, :id => 'query_form') do %>        
+<% form_tag(:id => 'query_form') do %>        
 
 <fieldset id="filters" class="collapsible collapsed">
 	<legend onclick="toggleFieldset(this);"><%= l(:label_filter_plural) %></legend>

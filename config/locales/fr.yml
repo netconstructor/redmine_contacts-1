@@ -76,7 +76,10 @@ fr:
   field_contact_background: Contexte   
   field_contact_tag_names: Tags
   field_deal_name: Nom
-  field_deal_decription: Description   
+  field_deal_decription: Description
+  field_contact_bank_account: Bank Account
+  field_contact_bank_code: Bank Code
+  field_contact_identifier: Customer Number
   
   field_company_field: Secteur d'activité
   
@@ -93,4 +96,5 @@ fr:
   permission_view_deals: Voir les affaires
   permission_edit_deals: Editer les affaires
   permission_delete_deals: Supprimer les affaires 
-  permission_add_notes: Add notes   
+  permission_add_notes: Add notes
+  permission_view_contact_bank_details: View banking information

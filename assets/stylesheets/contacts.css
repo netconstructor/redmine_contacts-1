@@ -146,23 +146,6 @@ div.avatar_subject div.info {
 	margin-left: 50px;
 }
 
-div.avatar_subject h1 {
-	font-size: 20px;
-	font-weight: normal;
-	margin: 0;
-	padding: 0;
-}         
-
-div.avatar_subject h1.deal_name {
-	font-size: 16px;
-	font-weight: normal;
-	margin: 0;
-	padding: 0;
-}
-
-div.avatar_subject h1.selected { background-color: #ffb;}
-div.avatar_subject h2.selected { background-color: #ffb;}
-
 div.avatar_subject h2 {
 	font-size: 13px;
 	color: #777;
@@ -179,7 +162,7 @@ div.Right div.avatar_subject div.info {
 	margin-left: 42px;
 }
 /*#edit_tags_form {display: block;	margin-top: 10px;}*/
-.notes div.contextual {vertical-align: top;}
+.notes div.contextual { vertical-align: top; }
 
 /*Deals*/
 
@@ -198,3 +181,22 @@ span.deal-status {
 }
             
 dt.contact-note { background-image: url(../images/ticket_note.png); }
+
+.contact { min-height: 52px; }
+
+.contact-name {
+  font-size: 1.5em;
+}
+
+.contact-name-bold { font-weight: bold; }
+
+.contact-name-normal { font-weight: normal; }
+
+/* >> The Magnificent CLEARFIX: Updated to prevent margin-collapsing on child elements << j.mp/bestclearfix */
+.clearfix:before, .clearfix:after {
+  content: "\0020"; display: block; height: 0; visibility: hidden;	
+} 
+
+.clearfix:after { clear: both; }
+/* Fix clearfix: blueprintcss.lighthouseapp.com/projects/15318/tickets/5-extra-margin-padding-bottom-of-page */
+.clearfix { zoom: 1; }

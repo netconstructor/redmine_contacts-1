@@ -1,5 +1,9 @@
 module ContactsHelper
   
+  def authorize_for_global(symbol)
+    User.current.allowed_to?(symbol, nil, {:global => true})
+  end
+  
   def render_project_hierarchy_with_contacts(projects)
     output = ''
     if projects.any?
@@ -31,6 +35,32 @@ module ContactsHelper
     output
   end
 
+  def pretty_name(contact=@contact)
+    
+    result = "<div class=\"contact-name\">"
+    
+    if contact.is_company
+      result << "<span class=\"contact-name-bold\">"
+      result << contact.first_name
+      result << "</span>"
+    elsif contact.last_name
+      result << "<span class=\"contact-name-bold\">"
+      result << contact.last_name
+      result << ",</span> <span class=\"contact-name-normal\">"
+      result << contact.first_name
+      result << " " + contact.middle_name if contact.middle_name
+      result << "</span>"
+    else
+      result << "<span class=\"contact-name-normal\">"
+      result << contact.first_name
+      result << " " + contact.middle_name if contact.middle_name
+      result << "</span>"
+    end   
+    result << "</div>"
+    
+    result
+  end
+
   # Display a link if the user is logged in
   def link_to_if_logged_in(name, options = {}, html_options = nil, *parameters_for_method_reference)
     link_to(name, options, html_options, *parameters_for_method_reference) if User.current.logged?
@@ -44,7 +74,7 @@ module ContactsHelper
     return link_to skype_name, 'skype:' + skype_name + '?call' unless skype_name.blank?
   end
   
-  def contacts_paginator(paginator, page_options)
+  def contacts_paginator(paginator, page_options = {})
     pagination_links_each(paginator, page_options) do |link|
         options = { :url => {:controller => 'contacts',  :action => 'live_search', :search => '', :params => params.merge({:page => link})}, :update => 'contact_list' }
         html_options = { :href => url_for(:controller => 'contacts',  :action => 'live_search', :params => params.merge({:page => link})) }

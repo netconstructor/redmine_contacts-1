@@ -4,7 +4,7 @@
 
 <h2><%= l(:label_contact_edit_information) %></h2>
 
-<% labelled_tabular_form_for :contact, @contact, :url => {:action => 'update', :project_id => @project, :id => @contact}, :html => { :multipart => true} do |f|  %>
+<% labelled_tabular_form_for :contact, @contact, :url => {:action => 'update', :id => @contact}, :html => { :multipart => true} do |f|  %>
   <%= render :partial => 'form', :locals => {:f => f}  %>
   <%= submit_tag l(:button_save) -%>
 <% end -%>

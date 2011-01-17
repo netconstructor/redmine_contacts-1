@@ -1,29 +1,27 @@
 class CreateTaggings < ActiveRecord::Migration
   def self.up
     return if self.table_exists?("taggings")
-    create_table :taggings do |t|
+
+    create_table :taggings, :id => false do |t|
       t.column :tag_id, :integer
-      t.column :taggable_id, :integer
-
-      # You should make sure that the column created is
-      # long enough to store the required class names.
-      t.column :taggable_type, :string
-
-      t.column :created_at, :datetime
+      t.column :container_id, :integer
+      t.column :container_type, :string
     end
 
-    add_index :taggings, :tag_id
-    add_index :taggings, [:taggable_id, :taggable_type]
+    add_index :taggings, [:container_id, :container_type]
+
   end
+
 
   def self.down
     drop_table :taggings if self.table_exists?("taggings")
   end
-
+  
   #######
   private
   #######
   def self.table_exists?(name)
     ActiveRecord::Base.connection.tables.include?(name)
   end
+  
 end

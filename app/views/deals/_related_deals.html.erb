@@ -3,7 +3,7 @@
 	<tr>
 		<td class="name" style="vertical-align: top;">
 			<h4>
-				<%= link_to deal.name, {:controller => 'deals', :action => 'show', :project_id => deal.project, :id => deal.id } %>
+				<%= link_to deal.name, {:controller => 'deals', :action => 'show', :id => deal.id } %>
 			</h4>
 			<%= h number_to_currency(deal.price) %>
 		</td>

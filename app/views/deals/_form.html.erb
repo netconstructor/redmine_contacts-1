@@ -7,5 +7,5 @@
 		<%= f.text_field :price, :label => l(:field_deal_price), :size => 10 %>
 	 </p>
 	<p><%= f.text_area :background, :label=>l(:field_deal_background), :rows => 5 -%></p>   
-	<p><%= f.select :assigned_to_id, (@project.assignable_users.collect {|m| [m.name, m.id]}), :include_blank => true, :label => l(:label_assigned_to) %></p>   
+	<p><%= f.select :assigned_to_id, (User.find(:all).collect {|m| [m.name, m.id]}), :include_blank => true, :label => l(:label_assigned_to) %></p>   
 </div>

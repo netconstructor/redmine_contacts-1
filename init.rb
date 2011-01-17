@@ -23,32 +23,33 @@ Redmine::Plugin.register :contacts do
                                            :index, 
                                            :live_search, 
                                            :contacts_notes, 
-                                           :contacts_issues], :public => true
+                                           :contacts_issues]
   permission :edit_contacts, :contacts => [:edit, 
                                              :update, 
                                              :new, 
                                              :create, 
                                              :add_attachment, 
                                              :add_note, 
-                                             :destroy_note, 
                                              :edit_tags,
                                              :add_task, 
                                              :add_contact_to_issue, 
                                              :close_issue,
-                                             :delete_own_notes]   
-  permission :add_notes, :contacts =>  [:add_note, :delete_own_notes], :deals => [:add_note]                                        
+                                             :delete_own_notes]
+  permission :view_contact_bank_details, :contacts => [:show_banking_info, :edit_banking_info]
+  permission :add_notes, :contacts =>  [:add_note, :delete_own_notes], :deals => [:add_note]
+  permission :delete_notes, :contacts => [:destroy_note]                                    
   permission :delete_contacts, :contacts => [:destroy, 
                                              :destroy_contact_from_issue]
   permission :delete_deals, :deals => :destroy
   
-  permission :view_deals, :deals => [:index, :show], :public => true
+  permission :view_deals, :deals => [:index, :show]
   permission :edit_deals, :deals => [:new, 
                                      :create, 
                                      :edit, 
                                      :update,
                                      :add_attachment,
                                      :add_note,
-                                     :destroy_note], :public => true
+                                     :destroy_note]
     
 
   # menu :project_menu, :contacts, {:controller => 'contacts', :action => 'index'}, :caption => :contacts_title, :param => :project_id

@@ -1,8 +1,8 @@
 
-  map.connect 'projects/:project_id/deals/:action', :controller => 'deals'
-  map.connect 'projects/:project_id/deals/:action/:id', :controller => 'deals'
-  map.connect 'projects/:project_id/contacts/:action', :controller => 'contacts'
-  map.connect 'projects/:project_id/contacts/:action/:id', :controller => 'contacts'
+  map.connect 'deals/:action', :controller => 'deals'
+  map.connect 'deals/:action/:id', :controller => 'deals'
+  map.connect 'contacts/:action', :controller => 'contacts'
+  map.connect 'contacts/:action/:id', :controller => 'contacts'
 
 # 
 # map.with_options :controller => 'contacts' do |contact_routes|

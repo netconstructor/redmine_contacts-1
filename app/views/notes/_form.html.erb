@@ -3,7 +3,7 @@
 <% if !ajax_form %>
 <span id="new_note_form_subject" >
 	<p>
-	  <%= f.text_field :created_at, :size => 15, :value => Date.current %><%= calendar_for "note_created_at" %>
+	  <%= f.text_field :created_on, :size => 15, :value => Date.current %><%= calendar_for "note_created_on" %>
 	</p>
 </span>             
 <% end %>

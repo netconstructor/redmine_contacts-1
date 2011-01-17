@@ -2,7 +2,7 @@
 	   <p><strong><%=l(:label_add_note_plural)%> </strong></p> 
 		
 	   <div id="add_ajax_node">
-	   	  <% remote_form_for(:note, @note, :url =>  {:action => 'add_note', :id => note_source, :project_id => note_source.project}, :html => {:id => "add_note_form"}) do |f| %> 
+	   	  <% remote_form_for(:note, @note, :url =>  {:action => 'add_note', :id => note_source }, :html => {:id => "add_note_form"}) do |f| %> 
 			<%= render :partial => 'notes/form', :locals => {:f => f, :ajax_form => true}  %>     
 			<%= submit_tag l(:button_add_note) %>
 		  <% end %>   
@@ -13,7 +13,7 @@
 	
 	   <div id="add_html_node"  style = "display:none;"> 
 		
-		<% form_for(:note, @note, :url =>  {:action => 'add_note', :id => note_source, :project_id => note_source.project}, :html => {:multipart => true, :id => "add_note_form"}) do |f| %> 
+		<% form_for(:note, @note, :url =>  {:action => 'add_note', :id => note_source }, :html => {:multipart => true, :id => "add_note_form"}) do |f| %> 
 			<%= render :partial => 'notes/form', :locals => {:f => f, :ajax_form => false}  %>     
 			<%= submit_tag l(:button_add_note) %>
 		<% end %>    

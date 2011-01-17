@@ -11,17 +11,16 @@ class ContactsController < ApplicationController
   helper :attachments
   helper :contacts
   helper :watchers
-  include WatchersHelper
   
+  include AttachmentsHelper
+  include WatchersHelper
   
   def show
     
-    find_contact_attachments
+    @attachments = @contact.attachments.find(:all, :order => "created_on DESC")
     
     if @contact.is_company 
       find_employees
-                            
-     
       @notes_pages, @notes = paginate :notes,
                                       :per_page => 30,
                                       :conditions => {:source_id  => Contact.find_all_by_company(@contact.first_name, :order => "last_name, first_name").map(&:id) << @contact.id,  
@@ -29,10 +28,9 @@ class ContactsController < ApplicationController
                                       :order => "created_on DESC" 
     else
       find_company
-      @notes_pages, @notes = paginate :notes, 
-                                      :per_page => 30,
-                                      :conditions => {:source_id => @contact.id, :source_type => 'Contact'},
-                                      :order => "created_on DESC"
+      @notes_pages = Paginator.new self, Note.count, 30, params[:page]
+
+      @notes = @contact.notes.find(:all, :order => "created_on DESC")
       
     end  
     respond_to do |format|
@@ -73,16 +71,9 @@ class ContactsController < ApplicationController
       flash[:notice] = l(:notice_successful_update)     
       # debugger
       avatar = @contact.attachments.find_by_description 'avatar' 
-      if params[:contact_avatar]    
-        avatar.destroy if avatar  
-        params[:contact_avatar][:description] = 'avatar'      
-        
-        if Redmine::VERSION.to_s >= "1.0.0"
-           Attachment.attach_files(@contact, {"1" => params[:contact_avatar]})     
-         else                                                                 
-           attach_files(@contact, {"1" => params[:contact_avatar]}) 
-         end
-        
+      if params[:avatar]    
+        avatar.destroy if avatar        
+        Attachment.attach_files(@contact, params[:avatar])     
       end
       redirect_to :action => "show", :id => @contact
     else
@@ -105,28 +96,29 @@ class ContactsController < ApplicationController
   end
 
   def create
-    contact = Contact.new(params[:contact])
-    contact.author = User.current
-    if contact.save
+    @contact = Contact.new(params[:contact])
+    @contact.author = User.current
+    if @contact.save
       flash[:notice] = l(:notice_successful_create)
-      if params[:contact_avatar]    
-        params[:contact_avatar][:description] = 'avatar'     
-        if Redmine::VERSION.to_s >= "1.0.0"
-          Attachment.attach_files(contact, {"1" => params[:contact_avatar]})     
-        else                                                                 
-          attach_files(contact, {"1" => params[:contact_avatar]}) 
-        end
+      if params[:avatar]    
+        Attachment.attach_files(@contact, params[:avatar]) 
       end
       
-      redirect_to :action => "show", :id => contact
+      redirect_to :action => "show", :id => @contact
     else
-      render "new", :id => @contact  
+      render "new", :id => @contact
     end
   end
 
  
   def edit_tags
-    @contact.update_attributes(params[:contact])
+    @contact.tag_list = params[:contact][:tag_list]
+    if @contact.save_tags
+      flash[:notice] = l(:notice_tag_update_successful)
+    else
+      flash[:notice] = l(:notice_tag_update_failed)
+    end
+
     respond_to do |format|
       format.js if request.xhr?
       format.html {redirect_to :action => 'show', :id => @contact }
@@ -194,7 +186,7 @@ class ContactsController < ApplicationController
     @note = Note.new(params[:note])
     @note.author = User.current   
     @note.created_on = @note.created_on + Time.now.hour.hours + Time.now.min.minutes + Time.now.sec.seconds if @note.created_on
-    if @contact.notes << @note    
+    if @contact.notes << @note
       
       if Redmine::VERSION.to_s >= "1.0.0"
         Attachment.attach_files(@note, params[:note_attachments])    
@@ -212,11 +204,11 @@ class ContactsController < ApplicationController
             flash.discard   
           end
         end if request.xhr?       
-        format.html {redirect_to :action => 'show', :id => @contact, :project_id => @project}
+        format.html {redirect_to :action => 'show', :id => @contact }
       end
     else
         # TODO При render если коммент не добавился то тут появялется ошибка из-за того что не передаются данные для paginate
-      redirect_to :action => 'show', :id => @contact, :project_id => @project   
+      redirect_to :action => 'show', :id => @contact 
     end                   
   end
 
@@ -230,10 +222,9 @@ class ContactsController < ApplicationController
             page["note_#{params[:note_id]}"].visual_effect :fade 
         end
       end if request.xhr?       
-      format.html {redirect_to :action => 'show', :project_id => @contact.project, :id => @contact }
+      format.html {redirect_to :action => 'show'}
     end
     
-    # redirect_to :action => 'show', :project_id => @project, :id => @contact
   end
       
   def close_issue
@@ -288,9 +279,14 @@ class ContactsController < ApplicationController
                                           :group => :issue_id,
                                           :conditions => cond,
                                           :order => "issues.due_date")    
-    @users = assigned_to_users                                      
+    assigned_to_users                                      
   end   
   
+  def show_banking_info
+  end
+
+  def edit_banking_info
+  end
   
 private
   
@@ -359,12 +355,6 @@ private
   def find_employees
     @employees = Contact.find_all_by_company(@contact.first_name, :order => "last_name, first_name")
   end
- 
-  def find_contact_attachments 
-    @contact_attachments = Attachment.find(:all, 
-                                    :conditions => { :container_type => "Note", :container_id => @contact.notes.map(&:id)},   
-                                    :order => "created_on DESC")
-  end
 
   def find_company
     @company = Contact.find_by_first_name(@contact.company)
@@ -380,7 +370,7 @@ private
     if params[:tag]
       cond = "(1 = 0)"
     end
-    @deals = Deal.visible.find(:all, :conditions => cond) || []
+    @deals = Deal.find(:all, :conditions => cond) || []
   end
   
   def find_contacts(pages=true)
@@ -414,11 +404,10 @@ private
   
   def assigned_to_users
     user_values = []  
-    project = @project
     user_values << ["<< #{l(:label_all)} >>", ""]
     user_values << ["<< #{l(:label_me)} >>", User.current.id] if User.current.logged?
-    if project
-      user_values += project.users.sort.collect{|s| [s.name, s.id.to_s] }
+    if @project
+      user_values += @project.users.sort.collect{|s| [s.name, s.id.to_s] }
     else
       project_ids = Project.all(:conditions => Project.visible_by(User.current)).collect(&:id)
       if project_ids.any?

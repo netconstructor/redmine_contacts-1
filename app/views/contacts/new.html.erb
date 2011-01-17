@@ -1,6 +1,6 @@
 <h2><%= l(:label_contact_new) %></h2>
 
-<% labelled_tabular_form_for :contact, @contact, :url => {:action => 'create', :project_id => @project}, :html => { :multipart => true} do |f|  %> 
+<% labelled_tabular_form_for :contact, @contact, :url => {:action => 'create' }, :html => { :multipart => true} do |f|  %> 
   <%= render :partial => 'form', :locals => {:f => f}  %>
   <%= submit_tag l(:button_save) -%>
 <% end -%>

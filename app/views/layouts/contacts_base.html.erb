@@ -4,9 +4,9 @@
 
 <% content_for :sidebar do %>   
 	<h3><%= l(:label_task_plural) %></h3>
-	<%= link_to l(:label_contacts_view_all), { :controller => 'contacts', :action => 'index', :project_id => @project} %>
+	<%= link_to l(:label_contacts_view_all), { :controller => 'contacts', :action => 'index'} %>
 	|
-	<%= link_to l(:label_deal_plural), { :controller => 'deals', :action => 'index', :project_id => @project} %>
+	<%= link_to l(:label_deal_plural), { :controller => 'deals', :action => 'index'} %>
 
 <% end %>
 

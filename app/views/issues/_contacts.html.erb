@@ -1,4 +1,4 @@
-<%  if !@issue.blank? && (User.current.allowed_to?(:view_contacts, @project) || User.current.admin?)  %>
+<%  if !@issue.blank? && User.current.allowed_to_globally?('contacts', 'show')  %>
 
 
 
@@ -16,8 +16,7 @@
 		<%= link_to_remote l(:button_add), 
 		                   :url => {:controller => 'contacts',
 		                            :action => 'add_contact_to_issue',
-									:project_id => @project,
-		                            :issue_id => @issue} if User.current.allowed_to?(:edit_contacts, @project) %>
+		                            :issue_id => @issue} if User.current.allowed_to_globally?('contacts', 'edit')) %>
 
 	 </div>
 
@@ -28,11 +27,10 @@
      	<% form_remote_tag( 
                 	   :url => {:controller => 'contacts',
               	              	:action => 'add_contact_to_issue',
-         	                    :issue_id => @issue,
-                        		:project_id => @project},
+         	                    :issue_id => @issue},
        	             :method => :post,
       	             :html => {:id => 'add-contact-form'}) do |f| %>
-		<p><%= select_tag :id, options_for_select(Contact.find(:all, :conditions => {:project_id => @project}).sort!{|x, y| x.name <=> y.name }.collect {|m| [m.name, m.id]}), :prompt => "--- #{l(:actionview_instancetag_blank_option)} ---" %>
+		<p><%= select_tag :id, options_for_select(Contact.find(:all).sort!{|x, y| x.name <=> y.name }.collect {|m| [m.name, m.id]}), :prompt => "--- #{l(:actionview_instancetag_blank_option)} ---" %>
 
 		<%= submit_tag l(:button_add) %>
 		<%= toggle_link l(:button_cancel), 'add-contact-form'%></p>
@@ -46,12 +44,11 @@
 		<%= avatar_to contact, :size => "16" %>	
 		<%= link_to_contact contact %>
 		<%= "(#{contact.job_title}) " unless contact.job_title.blank? %>     
-		<% if  User.current.allowed_to?(:delete_contacts, @project) %>
+		<% if  User.current.allowed_to_globally?('contacts', 'destroy') %>
 			<%= link_to_remote(image_tag('delete.png'), 
 					:url => {   :controller => 'contacts',
 								:action => 'destroy_contact_from_issue',
 								:issue_id => @issue, 
-								:project_id => @project,
 								:id => contact.id}, 
 					:method => :delete, 
 					:confirm => l(:text_are_you_sure), 

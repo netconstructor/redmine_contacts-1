@@ -36,9 +36,10 @@ class Contact < ActiveRecord::Base
   
   validates_format_of :email, :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, 
     :allow_nil => true, :allow_blank => true
+  validates_numericality_of :customer_number  
   
   def visible?(usr=nil)
-    (usr || User.current).allowed_to?(:view_contacts, :global)
+    (usr || User.current).allowed_to?(:view_contacts, nil, {:global => true})
   end
   
   def name
@@ -60,6 +61,20 @@ class Contact < ActiveRecord::Base
     @emails || self.email ? self.email.split( /, */) : []
   end
   
+  # XXX: Attachments currently fail without a project.  The following methods act as overrides.
+  
+  # This overrides the instance method in acts_as_attachable
+  def attachments_visible?(user=User.current)
+    user.allowed_to?(:view_contacts, nil, {:global => true})
+  end
+
+  def attachments_deletable?(user=User.current)
+    user.allowed_to?(:edit_contacts, nil, {:global => true})
+  end
+  
+  def project
+    nil
+  end
   
   private
   

@@ -14,34 +14,29 @@ class Note < ActiveRecord::Base
                     
   acts_as_event :title => Proc.new {|o| "#{l(:label_note_for)}: #{o.source.name}"}, 
                 :type => "issue-note", 
-                :url => Proc.new {|o| {:controller => o.source.class.name.pluralize.downcase, :action => 'show', :project_id => o.source.project, :id => o.source.id }},
+                :url => Proc.new {|o| {:controller => o.source.class.name.pluralize.downcase, :action => 'show', :id => o.source.id }},
                 :description => Proc.new {|o| o.content}      
                                    
   acts_as_activity_provider :type => 'contacts',               
                             :permission => :view_contacts,  
                             :author_key => :author_id,
                             :find_options => {:select => "#{Note.table_name}.*", 
-                            :joins => "LEFT JOIN #{Contact.table_name} ON #{Note.table_name}.source_type='Contact' AND #{Contact.table_name}.id = #{Note.table_name}.source_id " +
-                                      "LEFT JOIN #{Project.table_name} ON #{Contact.table_name}.project_id = #{Project.table_name}.id"}    
+                            :joins => "LEFT JOIN #{Contact.table_name} ON #{Note.table_name}.source_type='Contact' AND #{Contact.table_name}.id = #{Note.table_name}.source_id"}
                                                                
   acts_as_activity_provider :type => 'deals',               
                             :permission => :view_deals,  
                             :author_key => :author_id,
                             :find_options => {:select => "#{Note.table_name}.*", 
-                            :joins => "LEFT JOIN #{Deal.table_name} ON #{Note.table_name}.source_type='Deal' AND #{Deal.table_name}.id = #{Note.table_name}.source_id " +
-                                      "LEFT JOIN #{Project.table_name} ON #{Deal.table_name}.project_id = #{Project.table_name}.id"}
-   
-  def project   
-    source.project
-  end
+                            :joins => "LEFT JOIN #{Deal.table_name} ON #{Note.table_name}.source_type='Deal' AND #{Deal.table_name}.id = #{Note.table_name}.source_id"}
              
   def editable_by?(usr)   
-    true
-    # usr && usr.logged? && (usr.allowed_to?(:edit_notes, project) || (self.author == usr && usr.allowed_to?(:edit_own_notes, project)))
+    usr ||= self.author
+    usr.allowed_to?(:add_note, nil, {:global => true})    
   end
 
-  def destroyable_by?(usr)                                      
-    usr && (usr.allowed_to?(:edit_contacts, project) || (self.author == usr && usr.allowed_to?(:add_notes, project)))
+  def destroyable_by?(usr)
+    usr ||= self.author
+    usr.allowed_to?(:delete_notes, nil, {:global => true})                              
   end
        
   

@@ -3,7 +3,7 @@ class DealsController < ApplicationController
   
   PRICE_TYPE_PULLDOWN = [l(:label_price_fixed_bid), l(:label_price_per_hour)]
   
-  before_filter :find_project, :authorize, :except => [:index, :destroy_note]
+  before_filter :authorize_global, :except => [:index, :destroy_note]
   before_filter :find_optional_project, :only => [:index]   
   before_filter :find_deals, :only => :index
   before_filter :find_deal, :only => [:show, :edit, :update, :add_note]     
@@ -18,18 +18,17 @@ class DealsController < ApplicationController
   def new
     @deal = Deal.new   
     if @contacts.empty?
-      redirect_to :action => "index", :project_id  =>  @project     
+      redirect_to :action => "index"
     end  
   end
 
   def create   
     @deal = Deal.new(params[:deal])  
     @deal.contacts = [Contact.find(params[:contacts])]
-    @deal.project = @project 
     @deal.author = User.current      
     if @deal.save
       flash[:notice] = l(:notice_successful_create)
-      redirect_to :action => "show", :project_id => params[:project_id], :id => @deal
+      redirect_to :action => "show", :id => @deal
     else
       render :action => "new"   
     end
@@ -40,7 +39,7 @@ class DealsController < ApplicationController
       @deal.contacts = [Contact.find(params[:contacts])] if params[:contacts]
       flash[:notice] = l(:notice_successful_update)  
       respond_to do |format| 
-        format.html { redirect_to :action => "show", :id => @deal, :project_id => params[:project_id]} 
+        format.html { redirect_to :action => "show", :id => @deal } 
         format.xml  { } 
       end  
     else           
@@ -89,10 +88,10 @@ class DealsController < ApplicationController
             flash.discard   
           end
         end if request.xhr?       
-        format.html {redirect_to :action => 'show', :id => @deal, :project_id => @project}
+        format.html {redirect_to :action => 'show', :id => @deal }
       end
     else
-      redirect_to :action => 'show', :id => @deal, :project_id => @project
+      redirect_to :action => 'show', :id => @deal
     end                   
   end  
   
@@ -106,7 +105,7 @@ class DealsController < ApplicationController
             page["note_#{params[:note_id]}"].visual_effect :fade 
         end
       end if request.xhr?       
-      format.html {redirect_to :action => 'show', :project_id => @project, :id => @deal }
+      format.html {redirect_to :action => 'show', :id => @deal }
     end
   end
   
@@ -122,7 +121,7 @@ class DealsController < ApplicationController
   end
  
   def find_contacts    
-    @contacts = Contact.find(:all, :conditions => {:project_id => @project}, :order => "last_name, first_name")
+    @contacts = Contact.find(:all, :order => "last_name, first_name")
   end
   
   def find_project
@@ -137,7 +136,7 @@ class DealsController < ApplicationController
   end
   
   def find_deal
-    @deal = Deal.find(params[:id]) unless params[:project_id].blank?
+    @deal = Deal.find(params[:id])
   end
  
   def find_optional_project

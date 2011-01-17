@@ -51,6 +51,9 @@ en:
   label_deal_lost: Lost 
   
 
+  notice_tag_update_successful: Tags updated
+  notice_tag_update_failed: Tag update failed
+
   field_note_date: Note date
   
   field_deal_name: Name
@@ -64,6 +67,7 @@ en:
   field_contact_name: Name
   field_contact_last_name: Last Name
   field_contact_first_name: First Name
+  field_first_name: First Name
   field_contact_middle_name: Middle Name
   field_contact_job_title: Job title
   field_contact_company: Company
@@ -74,7 +78,11 @@ en:
   field_contact_skype: Skype
   field_contact_status: Status   
   field_contact_background: Background   
-  field_contact_tag_names: Tags     
+  field_contact_tag_names: Tags
+  field_contact_bank_account: Bank Account
+  field_contact_bank_code: Bank Code
+  field_contact_identifier: Customer Number
+  field_customer_number: Customer Number
   
   field_company_field: Industry 
   
@@ -91,4 +99,5 @@ en:
   permission_view_deals: View deals
   permission_edit_deals: Edit deals
   permission_delete_deals: Delete deals   
-  permission_add_notes: Add notes   
+  permission_add_notes: Add notes
+  permission_view_contact_bank_details: View banking information

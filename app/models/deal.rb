@@ -10,27 +10,24 @@ class Deal < ActiveRecord::Base
             STATUS_LOST =>  { :name => :label_deal_lost, :sym_name => :label_deal_lost, :color => 'red', :order => 3, :sym => STATUS_LOST }
               }.freeze
   
-  belongs_to :project   
   belongs_to :author, :class_name => "User", :foreign_key => "author_id"
   has_many :notes, :as => :source, :dependent => :delete_all, :order => "created_on DESC"
   belongs_to :assigned_to, :class_name => 'User', :foreign_key => 'assigned_to_id'    
 
-  has_and_belongs_to_many :contacts, :order => "#{Contact.table_name}.last_name, #{Contact.table_name}.first_name" 
-  
-  named_scope :visible, lambda {|*args| { :include => :project,
-                                          :conditions => Project.allowed_to_condition(args.first || User.current, :view_deals)} }                
+  has_and_belongs_to_many :contacts, :order => "#{Contact.table_name}.last_name, #{Contact.table_name}.first_name"                 
  
  
   acts_as_watchable
 
   acts_as_attachable :view_permission => :view_deals,
-                     :delete_permission => :edit_deals
+                     :delete_permission => :delete_deals
 
   validates_presence_of :name   
   validates_numericality_of :price, :allow_nil => true    
   
   def visible?(usr=nil)
-    (usr || User.current).allowed_to?(:view_deals, self.project)
+    usr ||= User.current
+    usr.allowed_to_globally?('deals', 'show')
   end  
   
   def status

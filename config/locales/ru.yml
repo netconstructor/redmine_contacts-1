@@ -73,7 +73,10 @@ ru:
   field_contact_skype: Skype
   field_contact_background: Дополнительная информация
   field_contact_status: Статус
-  field_contact_tag_names: Тэги     
+  field_contact_tag_names: Тэги
+  field_contact_bank_account: Bank Account
+  field_contact_bank_code: Bank Code
+  field_contact_identifier: Customer Number  
   
   field_company_field: Род деятельности
   
@@ -90,4 +93,5 @@ ru:
   permission_view_deals: Просмотр сделок
   permission_edit_deals: Редакирование сделок
   permission_delete_deals: Удаление сделок
-  permission_add_notes: Добавление заметок      
+  permission_add_notes: Добавление заметок
+  permission_view_contact_bank_details: View banking information

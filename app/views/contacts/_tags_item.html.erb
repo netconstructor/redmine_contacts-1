@@ -1,7 +1,7 @@
 <span class="tag">        
 	<%- if !is_note -%>
-		<%= link_to tags_item.name, {:controller => "contacts", :action => "index", :project_id => @project, :tag => tags_item.name}, :project_id => "tag_#{tags_item.id}" %>
+		<%= link_to tags_item.name, {:controller => "contacts", :action => "index", :tag => tags_item.name} %>
 	<%- else -%>
-		<%= link_to tags_item.name, {:controller => "contacts", :action => "contacts_notes", :project_id => @project, :tag => tags_item.name}, :project_id => "tag_#{tags_item.id}" %>
+		<%= link_to tags_item.name, {:controller => "contacts", :action => "contacts_notes", :tag => tags_item.name} %>
 	<%- end -%>
 </span>	

@@ -1,22 +1,30 @@
-<%= error_messages_for 'deal' %>
+<%= error_messages_for 'contact' %>
 <!-- {:onclick=>"Element.show('edit_tags_form'); Element.hide('last_name');  return false;"} -->
 
-
 <div class = "box"> 
-	<p class="avatar"><%= avatar_to(@contact, :size => "64") %></p>    
-	<p><%= label_tag l(:field_contact_avatar) %> <%= file_field_tag 'contact_avatar[file]', :size => 30, :id => nil  -%> </p>
+	<p class="avatar"><%= avatar_to(@contact, :size => "64") if @contact %></p>    
+	<p><%= label_tag l(:field_contact_avatar) %> <%= file_field_tag 'avatar[1][file]', :size => 30, :id => nil  -%>
+	<%= hidden_field_tag 'avatar[1][description]', 'avatar' -%> </p>
 	<p><%= f.check_box (:is_company, :label=>l(:field_contact_is_company),  :onclick => "if (this.checked) {Element.hide('person_data');$('job_title').firstChild.innerHTML='#{l(:field_company_field)}';} else {Element.show('person_data');$('job_title').firstChild.innerHTML='#{l(:field_contact_job_title)}';}" ) %></p>
-	<p><%= f.text_field :first_name, :label=> !@contact.is_company ? l(:field_contact_first_name) : l(:field_contact_name), :required => true, :size => 80 %></p>
-	<% if @contact.is_company %>
-	<div id="person_data" style="display: none;">
+	<% if @contact && @contact.is_company %>
+		<p><%= f.text_field :first_name, :label=> l(:field_contact_name), :required => true, :size => 80 %></p>
+		<div id="person_data" style="display: none;">
+			<p><%= f.text_field :last_name, :label=>l(:field_contact_last_name), :id => 'last_name' %></p>
+			<p><%= f.text_field 'middle_name', :label=>l(:field_contact_middle_name) %></p>
+			<p><%= f.text_field 'company', :label=>l(:field_contact_company) -%></p>
+		</div>
+		<p id="job_title"><%= f.text_field :job_title, :label => l(:field_company_field) %></p>
 	<% else %>
-	<div id="person_data">
+		<p><%= f.text_field :first_name, :label=> l(:field_contact_first_name), :required => true, :size => 80 %></p>
+		<div id="person_data">
+			<p><%= f.text_field :last_name, :label=>l(:field_contact_last_name), :id => 'last_name' %></p>
+			<p><%= f.text_field 'middle_name', :label=>l(:field_contact_middle_name) %></p>
+			<p><%= f.text_field 'company', :label=>l(:field_contact_company) -%></p>
+		</div>
+		<p id="job_title"><%= f.text_field :job_title, :label => l(:field_contact_job_title) %></p>
 	<% end %>
-		<p><%= f.text_field :last_name, :label=>l(:field_contact_last_name), :id => 'last_name' %></p>
-		<p><%= f.text_field 'middle_name', :label=>l(:field_contact_middle_name) %></p>
-		<p><%= f.text_field 'company', :label=>l(:field_contact_company) -%></p>
-	</div>
-	<p id="job_title"><%= f.text_field :job_title, :label => !@contact.is_company ? l(:field_contact_job_title) : l(:field_company_field) %></p>
+	
+	<p id="customer_number"><%= f.text_field :customer_number, :label => l(:field_contact_identifier), :required => true %></p>
 	<p><%= f.text_area 'address', :label=>l(:field_contact_address), :rows => 5 -%></p>
 
 	<div id="phones_fields"> 
@@ -39,6 +47,10 @@
 	<p><%= f.text_field 'website', :label=>l(:field_contact_website) -%></p>
 	<p><%= f.text_field 'skype_name', :label=>l(:field_contact_skype) -%></p>
 	<p class  = "notes"><%= f.text_area :background , :cols => 80, :rows => 8, :class => 'wiki-edit', :label=>l(:field_contact_background)  %></p>
+	<% if authorize_for_global(:edit_banking_info) %>
+		<p><%= f.text_field 'bank_account', :label =>l (:field_contact_bank_account) -%></p>
+		<p><%= f.text_field 'bank_code', :label =>l (:field_contact_bank_code) -%></p>
+	<% end %>
 	<%= wikitoolbar_for 'contact_background' %>
 	<p><%= f.text_field :tag_list, :label =>l(:field_contact_tag_names), :size => "100%" %></p>  
 

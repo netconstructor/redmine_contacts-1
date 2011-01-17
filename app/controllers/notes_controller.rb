@@ -1,7 +1,7 @@
 class NotesController < ApplicationController
   unloadable
   
-  before_filter :find_project, :authorize, :except => []
+  before_filter :authorize_global, :except => []
 
   def new
   end
@@ -37,7 +37,7 @@ class NotesController < ApplicationController
       end
     else
         # TODO При render если коммент не добавился то тут появялется ошибка из-за того что не передаются данные для paginate
-      redirect_to :action => 'show', :id => @contact, :project_id => @project   
+      redirect_to :action => 'show', :id => @contact  
     end                   
   end    
   

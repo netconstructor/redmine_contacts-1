@@ -1,8 +1,8 @@
 <div class="contextual">   
 	<% replace_watcher ||= 'watcher' %> 
 	<%= watcher_tag(@deal, User.current, {:id => replace_watcher, :replace => ['watcher','watcher2']}) %>  
-	<%= link_to_if_authorized l(:button_edit), {:controller => 'deals', :action => 'edit', :project_id => @project, :id => @deal}, :class => 'icon icon-edit' unless @deal.nil? %>
-	<%= link_to_if_authorized l(:button_delete), {:controller => 'deals', :action => 'destroy', :project_id => @project, :id => @deal}, :confirm => l(:text_are_you_sure), :method => :post, :class => 'icon icon-del' unless @deal.nil? %>
+	<%= link_to_if_authorized l(:button_edit), {:controller => 'deals', :action => 'edit', :id => @deal}, :class => 'icon icon-edit' unless @deal.nil? %>
+	<%= link_to_if_authorized l(:button_delete), {:controller => 'deals', :action => 'destroy', :id => @deal}, :confirm => l(:text_are_you_sure), :method => :post, :class => 'icon icon-del' unless @deal.nil? %>
 </div>
 
 <h2><%= l(:label_deal) %></h2>   
@@ -26,7 +26,6 @@
 				</div>
 				<% form_tag( {:controller => 'deals', 
 									 :action => 'update', 
-									 :project_id => @project, 
 									 :id => @deal }, 
 						     :multipart => true, 
 							 :id => "edit_status_form", 

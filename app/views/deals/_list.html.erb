@@ -5,9 +5,9 @@
 		<tr>
 			<td>
 				<div class="avatar_subject">
-					<%= link_to avatar_to(deal, :size => "32"), {:controller => 'deals', :action => 'show', :project_id => deal.project, :id => deal.id}, :id => "avatar" %>
+					<%= link_to avatar_to(deal, :size => "32"), {:controller => 'deals', :action => 'show', :id => deal.id}, :id => "avatar" %>
 					<div class="info">
-						<h1 class="deal_name"><%= link_to deal.name, :controller => 'deals', :action => 'show', :project_id => deal.project, :id => deal.id %></h1>
+						<h1 class="deal_name"><%= link_to deal.name, :controller => 'deals', :action => 'show', :id => deal.id %></h1>
 						<h2>
 							<%= link_to_contact(deal.contacts.first) if deal.contacts.any? %>    
 							

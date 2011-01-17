@@ -50,6 +50,9 @@ de:
   label_deal_won: Won
   label_deal_lost: Lost 
   
+  notice_tag_update_successful: Tags updated
+  notice_tag_update_failed: Tag update failed
+  
 
   field_note_date: Datum der Anmerkung
 
@@ -64,6 +67,7 @@ de:
   field_contact_name: Name
   field_contact_last_name: Nachname
   field_contact_first_name: Vorname
+  field_first_name: Vorname
   field_contact_middle_name: Zwischenname
   field_contact_job_title: Berufsbezeichnung
   field_contact_company: Firma
@@ -74,7 +78,11 @@ de:
   field_contact_skype: Skype
   field_contact_status: Status   
   field_contact_background: Hintergrundinformationen
-  field_contact_tag_names: Tags     
+  field_contact_tag_names: Tags
+  field_contact_bank_account: Bank Account
+  field_contact_bank_code: Bank Code
+  field_contact_identifier: Customer Number
+  field_customer_number: Customer Number
 
   field_company_field: Industrie
 
@@ -91,4 +99,5 @@ de:
   permission_view_deals: Auftrag anzeigen
   permission_edit_deals: Auftrag editieren
   permission_delete_deals: Auftrag löschen   
-  permission_add_notes: Anmerkungen anzeigen     
+  permission_add_notes: Anmerkungen anzeigen
+  permission_view_contact_bank_details: Bankdaten anzeigen

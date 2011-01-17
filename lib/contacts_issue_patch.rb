@@ -37,8 +37,7 @@ module MailerPatch
 
   module InstanceMethods
     def note_added(note, parent)
-      redmine_headers 'X-Project' => note.source.project.identifier, 
-                      'X-Notable-Id' => note.source.id,
+      redmine_headers 'X-Notable-Id' => note.source.id,
                       'X-Note-Id' => note.id
       message_id note
       if parent
@@ -47,24 +46,23 @@ module MailerPatch
         recipients note.source.watcher_recipients
       end
         
-      subject "[#{note.source.project.name}] - #{parent.name + ' - ' if parent}#{l(:label_note_for)} #{note.source.name}"  
+      subject "[#{l(:contacts_title)}] - #{parent.name + ' - ' if parent}#{l(:label_note_for)} #{note.source.name}"  
       
       body :note => note,   
-           :note_url => url_for(:controller => note.source.class.name.pluralize.downcase, :action => 'show', :project_id => note.source.project, :id => note.source.id)
+           :note_url => url_for(:controller => note.source.class.name.pluralize.downcase, :action => 'show', :id => note.source.id)
       render_multipart('note_added', body)
     end
     
     def issue_connected(issue, contact)
-      redmine_headers 'X-Project' => contact.project.identifier, 
-                      'X-Issue-Id' => issue.id,
+      redmine_headers 'X-Issue-Id' => issue.id,
                       'X-Contact-Id' => contact.id
       message_id contact
       recipients contact.watcher_recipients 
-      subject "[#{contact.project.project.name}] - #{l(:label_issue_for)} #{contact.name}"  
+      subject "[#{l(:contacts_title)}] - #{l(:label_issue_for)} #{contact.name}"  
       
       body :contact => contact,
            :issue => issue,
-           :contact_url => url_for(:controller => contact.class.name.pluralize.downcase, :action => 'show', :project_id => contact.project, :id => contact.id),
+           :contact_url => url_for(:controller => contact.class.name.pluralize.downcase, :action => 'show', :id => contact.id),
            :issue_url => url_for(:controller => "issues", :action => "show", :id => issue)
       render_multipart('issue_connected', body)
       

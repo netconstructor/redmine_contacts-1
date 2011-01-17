@@ -12,13 +12,13 @@
 		<tr>
 			<td class="avatar"><%= avatar_to(@contact, :size => "64") %></td>
 			<td class="name" style="vertical-align: top;">
-				<h1><%= h @contact.name %></h1>
+				<%= pretty_name(@contact) %>
 				<% if !@contact.is_company %>
 				<p>
 				<%= h @contact.job_title %>
 				<%= " #{l(:label_at_company)} " unless (@contact.job_title.blank? or @contact.company.blank?) %> 
 				<% if @company %>
-					<%= link_to @company.name, {:controller => 'contacts', :action => 'show', :project_id => @company.project, :id => @company.id } %>
+					<%= link_to @company.name, {:controller => 'contacts', :action => 'show', :id => @company.id } %>
 				<% else %>
 					<%= h @contact.company %> 
 				<% end %>
@@ -28,7 +28,7 @@
 					<span class="tags">
 						<%= render :partial => 'tags_item', :collection => @contact.tags, :locals => {:is_note => false} %>
 					</span>
-					<% if authorize_for('contacts', 'edit_tags') %>
+					<% if authorize_for_global(:edit_contacts) %>
 					<span class="contextual">
 						<%= link_to l(:label_edit_tags), {}, :onclick => "Element.show('edit_tags_form'); Element.hide('tags_data');  return false;", :id => 'edit_tags_link' %></p>
 					</span>
@@ -36,7 +36,6 @@
 				</div>
 				<% form_tag( {:controller => 'contacts', 
 									 :action => 'edit_tags', 
-									 :project_id => @project, 
 									 :id => @contact }, 
 						     :multipart => true, 
 							 :id => "edit_tags_form", 
@@ -54,7 +53,7 @@
 		</tr>
 	</table>
 	
-	<% if authorize_for('contacts', 'add_note') %>
+	<% if authorize_for_global(:add_notes) %>
 	<hr />
 	<%= render :partial => 'notes/add', :locals => {:note_source => @contact} %>
 	<% end %>
@@ -64,7 +63,7 @@
 	<h3><%= l(:label_note_plural) %></h3>
 	<div id="notes">  
 		<%= render :partial => 'notes/note_item', :collection => @notes, :locals => {:show_info => @contact.is_company, :note_source => @contact} %>
-		<p class="pagination"><%= pagination_links @notes_pages, :params => {:project_id => params[:project_id]}%></p>   
+		<p class="pagination"><%= pagination_links_full @notes_pages %></p>   
 	</div>
 
 </div>
@@ -84,7 +83,7 @@
 
 	<%= render :partial => 'related_issues' %>
 	
-	<%= render :partial => 'common/notes_attachments', :object => @contact_attachments %>    
+	<%= render :partial => 'common/notes_attachments', :object => @attachments %>    
 	
 	<% if @contact.deals.any? %>   
 	<h3><%= "#{l(:label_deal_plural)} - #{h number_to_currency(@contact.deals.sum(:price))}" %></h3>     
