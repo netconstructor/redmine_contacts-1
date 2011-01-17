@@ -1,0 +1,9 @@
+if @contact
+  customer_number = @contact.customer_number.to_s
+  projects_count = (@contact.projects.count.to_i + 1).to_s
+else
+  customer_number = '0'
+  projects_count = '1'
+end
+
+page << "$('project_identifier').value = '#{customer_number}-#{projects_count}'"

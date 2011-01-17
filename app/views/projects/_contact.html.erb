@@ -1,6 +1,14 @@
 <p>
-	<%= form.select :contact_id, options_for_select(Contact.find(:all).sort!{|x, y| x.name <=> y.name }.collect {|m| [m.name, m.id]}), :required => true, :prompt => "--- #{l(:actionview_instancetag_blank_option)} ---" %>
+	<%= form.select :contact_id, options_for_select(Contact.find(:all).sort!{|x, y| x.name <=> y.name }.collect {|m| [m.name, m.id]}), :required => true, :prompt => "--- #{l(:actionview_instancetag_blank_option)} ---"  %>		
+	
 </p>
-
-
-
+<script>
+//<![CDATA[
+document.observe('dom:loaded', function () {
+	Event.observe( 'project_contact_id', 'change', function () {
+		<%= remote_function :url => { :controller => :contacts, :action => :populate_project_id },
+		 	  :with => '\'?id=\' + $F(\'project_contact_id\')' %>
+	});
+});
+//]]>
+</script>

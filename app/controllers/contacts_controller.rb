@@ -335,6 +335,10 @@ private
                                  :order => "created_on DESC").collect{|obj| obj if obj.source.visible?}.compact                    
   end
   
+  def populate_project_id
+    @contact = Contact.find(params[:id])
+  end
+  
   def find_project
     @project = Project.find(params[:project_id])
     

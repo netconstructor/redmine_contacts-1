@@ -1,6 +1,6 @@
 
-  map.connect 'deals/:action', :controller => 'deals'
-  map.connect 'deals/:action/:id', :controller => 'deals'
+  #map.connect 'deals/:action', :controller => 'deals'
+  #map.connect 'deals/:action/:id', :controller => 'deals'
   map.connect 'contacts/:action', :controller => 'contacts'
   map.connect 'contacts/:action/:id', :controller => 'contacts'
 
