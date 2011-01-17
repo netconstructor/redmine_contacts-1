@@ -19,6 +19,5 @@ This plugin was originally created by Kirill Bezrukov.  [The original version](h
 
 ## Todos and known issues ##
 
-*	Avatars are broken
-*	Deals are broken
+*	Deals and issues are broken
 *	Add unit tests
