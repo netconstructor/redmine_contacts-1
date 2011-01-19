@@ -1,4 +1,4 @@
-class FixTaggingsWithoutLosingData < ActiveRecord::Migration
+class UpdateTaggings < ActiveRecord::Migration
   def self.up
     return unless self.table_exists?("taggings")
     
