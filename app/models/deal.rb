@@ -27,7 +27,7 @@ class Deal < ActiveRecord::Base
   
   def visible?(usr=nil)
     usr ||= User.current
-    usr.allowed_to_globally?('deals', 'show')
+    usr.allowed_to_globally?(:view_deals, {})
   end  
   
   def status

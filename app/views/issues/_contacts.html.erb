@@ -1,4 +1,4 @@
-<%  if !@issue.blank? && User.current.allowed_to_globally?('contacts', 'show')  %>
+<%  if !@issue.blank? && authorize_for_global(:view_contacts)  %>
 
 
 
@@ -16,7 +16,7 @@
 		<%= link_to_remote l(:button_add), 
 		                   :url => {:controller => 'contacts',
 		                            :action => 'add_contact_to_issue',
-		                            :issue_id => @issue} if User.current.allowed_to_globally?('contacts', 'edit')) %>
+		                            :issue_id => @issue} if authorize_for_global(:edit_contacts)) %>
 
 	 </div>
 
@@ -44,7 +44,7 @@
 		<%= avatar_to contact, :size => "16" %>	
 		<%= link_to_contact contact %>
 		<%= "(#{contact.job_title}) " unless contact.job_title.blank? %>     
-		<% if  User.current.allowed_to_globally?('contacts', 'destroy') %>
+		<% if authorize_for_global(:delete_contacts) %>
 			<%= link_to_remote(image_tag('delete.png'), 
 					:url => {   :controller => 'contacts',
 								:action => 'destroy_contact_from_issue',
