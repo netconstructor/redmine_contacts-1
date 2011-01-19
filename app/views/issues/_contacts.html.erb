@@ -16,7 +16,7 @@
 		<%= link_to_remote l(:button_add), 
 		                   :url => {:controller => 'contacts',
 		                            :action => 'add_contact_to_issue',
-		                            :issue_id => @issue} if authorize_for_global(:edit_contacts)) %>
+		                            :issue_id => @issue} if authorize_for_global(:edit_contacts) %>
 
 	 </div>
 
