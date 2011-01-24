@@ -5,7 +5,7 @@ class ContactsController < ApplicationController
   
   default_search_scope :contacts    
   
-  before_filter :authorize_global, :except => [:index, :live_search, :contacts_notes, :contacts_issues, :destroy_note, :close_issue, :assigned_to_users]
+  before_filter :authorize_global, :except => [:contacts_notes, :contacts_issues, :close_issue, :assigned_to_users]
   before_filter :find_contact, :except => [:index, :new, :create, :live_search, :contacts_notes, :close_issue, :contacts_issues, :destroy_note, :add_contact_to_issue]
  
   helper :attachments

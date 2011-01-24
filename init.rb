@@ -55,7 +55,9 @@ Redmine::Plugin.register :contacts do
   # menu :project_menu, :contacts, {:controller => 'contacts', :action => 'index'}, :caption => :contacts_title, :param => :project_id
   # menu :project_menu, :deals, { :controller => 'deals', :action => 'index' }, :caption => :label_deal_plural, :param => :project_id
   
-  menu :top_menu, :contacts, {:controller => 'contacts', :action => 'index'}, :caption => :contacts_title
+  menu :top_menu, :contacts, {:controller => 'contacts', :action => 'index'}, 
+    :caption => :contacts_title, 
+    :if => Proc.new { User.current.allowed_to?(:view_contacts, nil, :global => true) }
   
   activity_provider :contacts, :default => false, :class_name => ['Note']  
 
