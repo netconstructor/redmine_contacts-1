@@ -1,7 +1,8 @@
-<p>
-	<%= form.select :contact_id, options_for_select(Contact.find(:all).sort!{|x, y| x.name <=> y.name }.collect {|m| [m.name, m.id]}), :required => true, :prompt => "--- #{l(:actionview_instancetag_blank_option)} ---"  %>		
-	
+<p>		
+	<%= label(:project, :contact_id, l(:field_contact)) %><%= contact_select_tag(@project) %> 
 </p>
+
+<% unless @project.identifier_frozen? %>
 <script>
 //<![CDATA[
 document.observe('dom:loaded', function () {
@@ -12,3 +13,4 @@ document.observe('dom:loaded', function () {
 });
 //]]>
 </script>
+<% end %>

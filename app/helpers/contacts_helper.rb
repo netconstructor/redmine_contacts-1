@@ -34,6 +34,23 @@ module ContactsHelper
     @project = original_project
     output
   end
+  
+  def contact_select_tag(project)
+    # retrieve the default contact
+    contact_id = (params[:project] && params[:project][:contact_id]) || params[:contact_id]
+    if contact_id
+      selected = (contact_id.blank? ? nil : Contact.find(contact_id))
+    else
+      selected = project.contact_id
+    end
+    
+    options = options_for_select(
+      Contact.find(:all).sort!{|x, y| x.name <=> y.name }.collect {|m| [m.name, m.id]}, 
+      :selected => selected,
+      :prompt => "--- #{l(:actionview_instancetag_blank_option)} ---",
+      :required => true)
+    content_tag('select', options, :name => 'project[contact_id]', :id => 'project_contact_id')
+  end
 
   def pretty_name(contact=@contact)
     
