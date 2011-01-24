@@ -24,7 +24,7 @@
 		<p id="job_title"><%= f.text_field :job_title, :label => l(:field_contact_job_title) %></p>
 	<% end %>
 	
-	<p id="customer_number"><%= f.text_field :customer_number, :label => l(:field_contact_identifier), :required => true %></p>
+	<p id="customer_number"><%= f.text_field :customer_number, :label => l(:field_contact_identifier) %></p>
 	<p><%= f.text_area 'address', :label=>l(:field_contact_address), :rows => 5 -%></p>
 
 	<div id="phones_fields"> 

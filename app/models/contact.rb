@@ -36,7 +36,7 @@ class Contact < ActiveRecord::Base
   
   validates_format_of :email, :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, 
     :allow_nil => true, :allow_blank => true
-  validates_numericality_of :customer_number  
+  validates_numericality_of :customer_number, :allow_blank => true
   
   def visible?(usr=nil)
     (usr || User.current).allowed_to?(:view_contacts, nil, {:global => true})
