@@ -26,7 +26,7 @@ module ContactsHelper
       output << render_project_hierarchy(orphans)
       
       sorted.each do |contact|
-        output << "<h3 class='contacts'>#{contact.name}</h3>"
+        output << "<h3 class='contacts'>#{pretty_name(contact)}</h3>"
         output << render_project_hierarchy(contact.projects)
       end
       
