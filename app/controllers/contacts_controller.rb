@@ -280,13 +280,7 @@ class ContactsController < ApplicationController
                                           :conditions => cond,
                                           :order => "issues.due_date")    
     assigned_to_users                                      
-  end   
-  
-  def show_banking_info
-  end
-
-  def edit_banking_info
-  end
+  end 
   
 private
   

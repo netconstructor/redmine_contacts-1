@@ -35,7 +35,6 @@ Redmine::Plugin.register :contacts do
                                              :add_contact_to_issue, 
                                              :close_issue,
                                              :delete_own_notes]
-  permission :view_contact_bank_details, :contacts => [:show_banking_info, :edit_banking_info]
   permission :add_notes, :contacts =>  [:add_note, :delete_own_notes], :deals => [:add_note]
   permission :delete_notes, :contacts => [:destroy_note]                                    
   permission :delete_contacts, :contacts => [:destroy, 

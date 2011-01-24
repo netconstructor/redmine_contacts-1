@@ -49,9 +49,5 @@
 	<% if !@contact.skype_name.blank? %>
 	<tr> <th class = "skype"><%= l(:field_contact_skype) %>:</th><td class="skype"><%=skype_to @contact.skype_name %></td> </tr>
 	<% end %>
-	<% if authorize_for_global(:show_banking_info) %>
-		<tr> <th class = "banking"><%= l(:field_contact_bank_account) %>:</th><td class="banking"><%= @contact.bank_account %></td> </tr>
-		<tr> <th class = "banking"><%= l(:field_contact_bank_code) %>:</th><td class="banking"><%= @contact.bank_code %></td> </tr>
-	<% end %>
 </table>
             

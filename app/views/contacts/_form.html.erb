@@ -47,10 +47,6 @@
 	<p><%= f.text_field 'website', :label=>l(:field_contact_website) -%></p>
 	<p><%= f.text_field 'skype_name', :label=>l(:field_contact_skype) -%></p>
 	<p class  = "notes"><%= f.text_area :background , :cols => 80, :rows => 8, :class => 'wiki-edit', :label=>l(:field_contact_background)  %></p>
-	<% if authorize_for_global(:edit_banking_info) %>
-		<p><%= f.text_field 'bank_account', :label =>l (:field_contact_bank_account) -%></p>
-		<p><%= f.text_field 'bank_code', :label =>l (:field_contact_bank_code) -%></p>
-	<% end %>
 	<%= wikitoolbar_for 'contact_background' %>
 	<p><%= f.text_field :tag_list, :label =>l(:field_contact_tag_names), :size => "100%" %></p>  
 
