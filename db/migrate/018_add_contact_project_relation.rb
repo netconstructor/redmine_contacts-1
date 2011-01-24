@@ -4,7 +4,7 @@ class AddContactProjectRelation < ActiveRecord::Migration
   end
 
   def self.down
-    rename_column :projects, :contact_id
+    remove_column :projects, :contact_id
   end
   
 end
