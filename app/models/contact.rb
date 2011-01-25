@@ -1,7 +1,7 @@
 class Contact < ActiveRecord::Base
   unloadable
-  
-  require 'acts_as_taggable'
+
+  require 'acts-as-taggable-on'  
   acts_as_taggable
   
   has_many :projects
