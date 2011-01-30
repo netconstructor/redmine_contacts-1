@@ -83,6 +83,7 @@ de:
   field_contact_bank_code: Bank Code
   field_contact_identifier: Customer Number
   field_customer_number: Customer Number
+  field_contact_birthday: Geburtstag
 
   field_company_field: Industrie
 

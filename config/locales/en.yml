@@ -82,6 +82,7 @@ en:
   field_contact_bank_account: Bank Account
   field_contact_bank_code: Bank Code
   field_contact_identifier: Customer Number
+  field_contact_birthday: Birthday
   field_customer_number: Customer Number
   
   field_company_field: Industry 

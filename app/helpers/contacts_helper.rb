@@ -60,7 +60,7 @@ module ContactsHelper
       result << "<span class=\"contact-name-bold\">"
       result << contact.first_name
       result << "</span>"
-    elsif contact.last_name
+    elsif !contact.last_name.blank?
       result << "<span class=\"contact-name-bold\">"
       result << contact.last_name
       result << ",</span> <span class=\"contact-name-normal\">"

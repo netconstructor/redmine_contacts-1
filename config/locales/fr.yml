@@ -80,6 +80,7 @@ fr:
   field_contact_bank_account: Bank Account
   field_contact_bank_code: Bank Code
   field_contact_identifier: Customer Number
+  field_contact_birthday: Anniversaire
   
   field_company_field: Secteur d'activité
   

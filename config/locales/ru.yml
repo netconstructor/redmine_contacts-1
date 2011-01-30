@@ -76,7 +76,8 @@ ru:
   field_contact_tag_names: Тэги
   field_contact_bank_account: Bank Account
   field_contact_bank_code: Bank Code
-  field_contact_identifier: Customer Number  
+  field_contact_identifier: Customer Number
+  field_contact_birthday: День рождения
   
   field_company_field: Род деятельности
   
