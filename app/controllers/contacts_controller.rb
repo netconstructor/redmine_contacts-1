@@ -113,7 +113,7 @@ class ContactsController < ApplicationController
  
   def edit_tags
     @contact.tag_list = params[:contact][:tag_list]
-    if @contact.save
+    if @contact.save_tags
       flash[:notice] = l(:notice_tag_update_successful)
     else
       flash[:notice] = l(:notice_tag_update_failed)
