@@ -377,7 +377,7 @@ private
       @tag = Tag.find_by_name(params[:tag])
       if @tag     
         if pages
-          @contacts_pages = Paginator.new self, Contact.tagged_with(@tag).count, 20, params[:page]     
+          @contacts_pages = Paginator.new self, Contact.tagged_with(@tag, :match_all => :true).count, 20, params[:page]     
           @contacts = Contact.tagged_with(@tag, :order => "last_name, first_name",
                                          :limit  =>  @contacts_pages.items_per_page,
                                          :offset =>  @contacts_pages.current.offset) || []
