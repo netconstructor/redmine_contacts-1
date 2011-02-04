@@ -2,16 +2,15 @@ class SwitchToActsAsTaggableOn < ActiveRecord::Migration
   def self.up
     return unless self.table_exists?("taggings")
     
-    # XXX: Fix this!  partial migration caused a mess..
-    #remove_index :taggings, [:taggable_id, :taggable_type]
-    #remove_column :tags, :color
+    remove_index :taggings, [:taggable_id, :taggable_type]
+    remove_column :tags, :color
     
-    #add_column :taggings, :id, :integer
-    #add_column :taggings, :tagger_id, :integer
-    #add_column :taggings, :tagger_type, :string
-    #add_column :taggings, :context, :string
+    add_column :taggings, :id, :integer
+    add_column :taggings, :tagger_id, :integer
+    add_column :taggings, :tagger_type, :string
+    add_column :taggings, :context, :string
     
-    #add_index :taggings, [:taggable_id, :taggable_type, :context]
+    add_index :taggings, [:taggable_id, :taggable_type, :context]
     
     require 'acts-as-taggable-on'
     
