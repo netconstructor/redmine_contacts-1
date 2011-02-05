@@ -35,7 +35,7 @@
 	
 	<h3><%= l(:label_tags_plural) %></h3>
 	<div id="tags">
-		<%= render :partial => "tags_item", :collection => @tags, :locals => {:is_note => false}  %>
+		<%= render :partial => "add_filtered_tag", :collection => @other_tags, :as => :tag %>
 	</div>
 
 

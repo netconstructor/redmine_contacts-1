@@ -35,6 +35,7 @@ de:
   label_issue_added: Issue added
   label_add_emails_rule: devide by commas
   label_add_phones_rule: devide by commas
+  label_contacts_tagged_with: Contacts tagged with
 
   label_note_show_extras: Erweiterte Optionen (Dateien, Datum)
   label_note_hide_extras: Erweiterte Optionen ausblenden
@@ -52,6 +53,7 @@ de:
   
   notice_tag_update_successful: Tags updated
   notice_tag_update_failed: Tag update failed
+  notice_tag_not_found: Unknown tag {{tag}}
   
 
   field_note_date: Datum der Anmerkung

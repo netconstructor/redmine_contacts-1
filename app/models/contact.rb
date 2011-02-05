@@ -33,10 +33,10 @@ class Contact < ActiveRecord::Base
   # name or company is mandatory
   validates_presence_of :first_name 
   validates_uniqueness_of :first_name, :scope => [:last_name, :middle_name, :company]
-  
-  validates_format_of :email, :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i, 
-    :allow_nil => true, :allow_blank => true
+
   validates_numericality_of :customer_number, :allow_blank => true
+  
+  named_scope :by_last_name, :order => "last_name, first_name"
   
   def visible?(usr=nil)
     (usr || User.current).allowed_to?(:view_contacts, nil, {:global => true})

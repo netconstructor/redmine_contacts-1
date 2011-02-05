@@ -97,16 +97,24 @@ span.tag a {
   background-color: #E1FFD1;
   border: 1px solid #C5F8AC;
   border-radius: 5px;
-	padding: 3px;
+	padding: 0.2em 0.5em;
 	color: #060;
 	/*	display: block;*/
-	white-space: nowrap;
+	/* white-space: nowrap; */
 	line-height:  2em;
 }
 
 span.tag a:hover {
   text-decoration: underline;
 }
+
+.tag_remove { 
+  color: #9C9;
+  vertical-align: top;
+  padding-left: 0.5em;
+}
+.tag_remove a:hover { text-decoration: none; }
+
 div#tags_data span.contextual {float: none; padding-left: 0px;}
 
 

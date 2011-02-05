@@ -33,8 +33,9 @@ en:
   label_related_contacts: Related contacts    
   label_assigned_to: Responsible
   label_issue_added: Issue added
-  label_add_emails_rule: devide by commas
-  label_add_phones_rule: devide by commas
+  label_add_emails_rule: divide by commas
+  label_add_phones_rule: divide by commas
+  label_contacts_tagged_with: Contacts tagged with
    
   label_note_show_extras: Advanced (files, date)
   label_note_hide_extras: Hide advanced       
@@ -53,6 +54,7 @@ en:
 
   notice_tag_update_successful: Tags updated
   notice_tag_update_failed: Tag update failed
+  notice_tag_not_found: Unknown tag {{tag}}
 
   field_note_date: Note date
   

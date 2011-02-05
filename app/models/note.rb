@@ -38,7 +38,13 @@ class Note < ActiveRecord::Base
     usr ||= self.author
     usr.allowed_to?(:delete_notes, nil, {:global => true})                              
   end
-       
+  
+  def self.recent_notes(contacts)
+    last_notes = Note.find(:all, 
+                           :conditions => { :source_type => "Contact", :source_id => contacts.map(&:id)}, 
+                           :limit => count,
+                           :order => "created_on DESC").collect{|obj| obj if obj.source.visible?}.compact
+  end
   
   private
   

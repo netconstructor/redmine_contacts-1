@@ -18,7 +18,7 @@
 				<% end %>
 			</div>
 			<div class="tags">
-					<%= render :partial => "tags_item", :collection => contact.tags, :locals => {:is_note => false}  %>
+				<%= render :partial => "add_filtered_tag", :collection => contact.tags, :as => :tag %>
 			</div>
 	</div>
     <% end %>      

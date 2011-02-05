@@ -6,7 +6,7 @@ class ContactsController < ApplicationController
   default_search_scope :contacts    
   
   before_filter :authorize_global, :except => [:contacts_notes, :contacts_issues, :close_issue, :assigned_to_users]
-  before_filter :find_contact, :except => [:index, :new, :create, :live_search, :contacts_notes, :close_issue, :contacts_issues, :destroy_note, :add_contact_to_issue]
+  before_filter :find_contact, :except => [:index, :new, :create, :live_search, :contacts_notes, :close_issue, :contacts_issues, :destroy_note, :add_contact_to_issue, :tagged]
  
   helper :attachments
   helper :contacts
@@ -46,18 +46,46 @@ class ContactsController < ApplicationController
   end
   
   def index    
+
+    find_contacts
+    
     if !request.xhr?
       last_notes
-      find_tags      
+      find_tags
+      # XXX: refactor index
+      @other_tags = @tags
+      @filter_tags = []
     end
-    find_contacts
-    @contacts.sort! {|x, y| x.name <=> y.name }     
+    
+    @contacts.sort! {|x, y| x.name <=> y.name }
     # debugger
     if request.xhr?
       render :partial => "list", :layout => false, :locals => {:contacts => @contacts} 
     end
     
     #@contacts = Contact.find(:all)
+  end
+  
+  def tagged
+    
+    @filter_tags = []
+    params[:tags].each do |tag|
+      exists = Tag.find_by_name tag
+      if exists 
+        @filter_tags << exists
+      else
+        flash[:error] = t(:notice_tag_not_found, :tag => tag)
+      end
+    end        
+
+    @contacts_pages = Paginator.new self, Contact.tagged_with(@filter_tags, :match_all => :true).count, 20, params[:page]     
+    @contacts = Contact.tagged_with(@filter_tags, {}).by_last_name.all(
+      :limit => @contacts_pages.items_per_page,
+      :offset =>  @contacts_pages.current.offset) || []
+    
+    @last_notes = Note.recent_notes(@contacts)
+    @all_tags = Contact.tag_counts
+    @other_tags = @all_tags - @filter_tags #.delete_if { |tag| @filter_tags.include? tag.name }
   end
   
   def edit
@@ -319,14 +347,11 @@ private
   
 
 
-  def last_notes(count=5)      
-    cond = "(1 = 1)"
-    cond << " and project_id = #{@project.id}" if @project
-    
-      @last_notes = Note.find(:all, 
-                                 :conditions => { :source_type => "Contact", :source_id => find_contacts(false).map(&:id)}, 
+  def last_notes(count=5)
+    @last_notes = Note.find(:all, 
+                                 :conditions => { :source_type => "Contact", :source_id => @contacts.map(&:id)}, 
                                  :limit => count,
-                                 :order => "created_on DESC").collect{|obj| obj if obj.source.visible?}.compact                    
+                                 :order => "created_on DESC").collect{|obj| obj if obj.source.visible?}.compact                 
   end
   
   def populate_project_id
@@ -372,6 +397,7 @@ private
   end
   
   def find_contacts(pages=true)
+    # TODO: make this readable
     cond = "1 AND 1"          
     if params[:tag]
       @tag = Tag.find_by_name(params[:tag])
@@ -384,6 +410,8 @@ private
         else
           @contacts = Contact.tagged_with(@tag, :order => "last_name, first_name") || []
         end
+      else
+        @contacts = []
       end
     else      
       if params[:search] and request.xhr?   
@@ -422,5 +450,6 @@ private
     render_404
   end
   
-
+  private
+  
 end

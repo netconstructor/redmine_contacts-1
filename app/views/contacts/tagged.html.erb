@@ -1,0 +1,30 @@
+<h2><%= "#{l(:label_contacts_tagged_with)}:" %>
+	<%= render :partial => "remove_filtered_tag", :collection => @filter_tags, :as => :tag %>
+</h2>
+
+<div id="contact_list">  
+	<%= render :partial => 'list' %>   
+</div>
+
+<% content_for :sidebar do %>          
+	<%= render :partial => 'common/sidebar' %>
+    
+	
+	<h3><%= l(:label_tags_plural) %></h3>
+	<div id="tags">
+		<%= render :partial => "remove_filtered_tag", :collection => @filter_tags, :as => :tag %>
+		<%= render :partial => "add_filtered_tag", :collection => @other_tags, :as => :tag %>
+	</div>
+
+
+	<h3><%= l(:label_last_notes) %></h3>
+	<div id="notes">
+		<%= render :partial => 'notes', :object => @last_notes %>        
+	</div>
+
+<% end %>
+
+<% content_for(:header_tags) do %>
+  <%= stylesheet_link_tag :contacts, :plugin => 'redmine_contacts' %>
+<% end %>
+
