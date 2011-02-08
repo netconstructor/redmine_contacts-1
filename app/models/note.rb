@@ -16,19 +16,7 @@ class Note < ActiveRecord::Base
                 :type => "issue-note", 
                 :url => Proc.new {|o| {:controller => o.source.class.name.pluralize.downcase, :action => 'show', :id => o.source.id }},
                 :description => Proc.new {|o| o.content}      
-                                   
-  acts_as_activity_provider :type => 'contacts',               
-                            :permission => :view_contacts,  
-                            :author_key => :author_id,
-                            :find_options => {:select => "#{Note.table_name}.*", 
-                            :joins => "LEFT JOIN #{Contact.table_name} ON #{Note.table_name}.source_type='Contact' AND #{Contact.table_name}.id = #{Note.table_name}.source_id"}
-                                                               
-  acts_as_activity_provider :type => 'deals',               
-                            :permission => :view_deals,  
-                            :author_key => :author_id,
-                            :find_options => {:select => "#{Note.table_name}.*", 
-                            :joins => "LEFT JOIN #{Deal.table_name} ON #{Note.table_name}.source_type='Deal' AND #{Deal.table_name}.id = #{Note.table_name}.source_id"}
-             
+                                                                               
   def editable_by?(usr)   
     usr ||= self.author
     usr.allowed_to?(:add_note, nil, {:global => true})    

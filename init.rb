@@ -58,8 +58,5 @@ Redmine::Plugin.register :contacts do
     :caption => :contacts_title, 
     :if => Proc.new { User.current.allowed_to?(:view_contacts, nil, :global => true) }
   
-  activity_provider :contacts, :default => false, :class_name => ['Note']  
-
-  # activity_provider :contacts, :default => false   
 end
 

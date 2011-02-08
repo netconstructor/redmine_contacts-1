@@ -19,11 +19,6 @@ class Contact < ActiveRecord::Base
   acts_as_attachable :view_permission => :view_contacts,  
                      :delete_permission => :edit_contacts
 
-  # acts_as_activity_provider :type => 'contacts',
-  #                           :timestamp => "#{Contact.table_name}.created_on",
-  #                           :author_key => "#{Contact.table_name}.author_id",
-  #                           :permission => :view_contacts
-
   acts_as_event :datetime => :created_on,
                 :url => Proc.new {|o| {:controller => 'contacts', :action => 'show', :id => o}}, 	
                 :type => Proc.new {|o| 'contact' },  
