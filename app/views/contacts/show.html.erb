@@ -26,7 +26,7 @@
 				<% end %>
 				<div id="tags_data">
 					<span class="tags">
-						<%= render :partial => 'tags_item', :collection => @contact.tags, :locals => {:is_note => false} %>
+						<%= render :partial => "add_filtered_tag", :collection => @contact.tags, :as => :tag %>
 					</span>
 					<% if authorize_for_global(:edit_contacts) %>
 					<span class="contextual">

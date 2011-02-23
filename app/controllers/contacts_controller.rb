@@ -18,6 +18,8 @@ class ContactsController < ApplicationController
   def show
     
     @attachments = @contact.attachments.find(:all, :order => "created_on DESC")
+    @filter_tags = []
+    
     
     if @contact.is_company 
       find_employees
