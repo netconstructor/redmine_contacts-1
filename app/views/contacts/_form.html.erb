@@ -2,16 +2,8 @@
 <!-- {:onclick=>"Element.show('edit_tags_form'); Element.hide('last_name');  return false;"} -->
 
 <div class = "box">
-    <p><%= f.text_field :tag_list, :label =>l(:field_contact_tag_names), :size => "100%" %></p>
     
-    <p><%= label_tag l(:label_relationship) %>  <%= f.collection_select :relationship_ids, @relationships, :id, :name, {}, { :selected => @contact.relationship_ids, :multiple => true } %></p>
-    <p><%= label_tag l(:label_department) %>  <%= f.collection_select :department_ids, @departments, :id, :name, {}, { :selected => @contact.department_ids, :multiple => true } %></p>
-    
-	<p class="avatar"><%= avatar_to(@contact, :size => "64") if @contact %></p>    
-	<p><%= label_tag l(:field_contact_avatar) %> <%= file_field_tag 'avatar[1][file]', :size => 30, :id => nil  -%>
-	<%= hidden_field_tag 'avatar[1][description]', 'avatar' -%> </p>
-	<p><%= f.check_box (:is_company, :label=>l(:field_contact_is_company),  :onclick => "if (this.checked) {Element.hide('person_data');$('job_title').firstChild.innerHTML='#{l(:field_company_field)}';} else {Element.show('person_data');$('job_title').firstChild.innerHTML='#{l(:field_contact_job_title)}';}" ) %></p>
-	<% if @contact && @contact.is_company %>
+    <% if @contact && @contact.is_company %>
 		<p><%= f.text_field :first_name, :label=> l(:field_contact_name), :required => true, :size => 80 %></p>
 		<div id="person_data" style="display: none;">
 			<p><%= f.text_field :last_name, :label=>l(:field_contact_last_name), :id => 'last_name' %></p>
@@ -28,6 +20,16 @@
 		</div>
 		<p id="job_title"><%= f.text_field :job_title, :label => l(:field_contact_job_title) %></p>
 	<% end %>
+    
+    <p><%= f.text_field :tag_list, :label =>l(:field_contact_tag_names), :size => "100%" %></p>
+    
+    <p><%= label_tag l(:label_relationship) %>  <%= f.collection_select :relationship_ids, @relationships, :id, :name, {}, { :selected => @contact.relationship_ids, :multiple => true } %></p>
+    <p><%= label_tag l(:label_department) %>  <%= f.collection_select :department_ids, @departments, :id, :name, {}, { :selected => @contact.department_ids, :multiple => true } %></p>
+    
+	<p class="avatar"><%= avatar_to(@contact, :size => "64") if @contact %></p>    
+	<p><%= label_tag l(:field_contact_avatar) %> <%= file_field_tag 'avatar[1][file]', :size => 30, :id => nil  -%>
+	<%= hidden_field_tag 'avatar[1][description]', 'avatar' -%> </p>
+	<p><%= f.check_box (:is_company, :label=>l(:field_contact_is_company),  :onclick => "if (this.checked) {Element.hide('person_data');$('job_title').firstChild.innerHTML='#{l(:field_company_field)}';} else {Element.show('person_data');$('job_title').firstChild.innerHTML='#{l(:field_contact_job_title)}';}" ) %></p>
 	
 	<p id="customer_number"><%= f.text_field :customer_number, :label => l(:field_contact_identifier) %></p>
 	<p><%= f.text_area 'address', :label=>l(:field_contact_address), :rows => 5 -%></p>

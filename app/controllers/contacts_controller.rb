@@ -47,8 +47,9 @@ class ContactsController < ApplicationController
     end
   end
   
-  def index    
-
+  def index
+    @departments = Department.find(:all)
+    @relationships = Relationship.find(:all)
     find_contacts
     
     if !request.xhr?
@@ -424,9 +425,15 @@ private
         @contacts = []
       end
     else      
-      if params[:search] and request.xhr?   
+      if params[:search] and not params[:search].empty? and request.xhr?   
         cond << " and (first_name LIKE '%#{params[:search]}%' or last_name LIKE '%#{params[:search]}%' or middle_name LIKE '%#{params[:search]}%' or company LIKE '%#{params[:search]}%' or job_title LIKE '%#{params[:search]}%')" 
-      end 
+      end
+      if params[:relationship] and not params[:relationship].empty? and request.xhr?   
+        cond << " AND id IN (SELECT contact_id FROM rc_contacts_relationships WHERE relationship_id = #{params[:relationship]})" 
+      end
+      if params[:department] and not params[:department].empty? and request.xhr?   
+        cond << " AND id IN (SELECT contact_id FROM rc_contacts_departments WHERE department_id = #{params[:department]})" 
+      end
       if pages  
         @contacts_pages = Paginator.new self, Contact.count(:conditions => cond), 20, params[:page]     
         @contacts = Contact.find(:all, :conditions => cond, :order => "last_name, first_name",

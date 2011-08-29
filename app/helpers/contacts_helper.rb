@@ -51,6 +51,12 @@ module ContactsHelper
       :required => true)
     content_tag('select', options, :name => 'project[contact_id]', :id => 'project_contact_id')
   end
+  
+  def live_search_select_tag_options(array)
+    options = "<option value=\"\" selected=\"selected\"></option>"
+    options << options_for_select(array.collect { |r| [r.name, r.id] })
+    options
+  end
 
   def pretty_name(contact=@contact)
     

@@ -12,12 +12,32 @@
 			
 
 			<%= observe_field("search",  
-				:frequency => 1, 
 			    :update => 'contact_list', 
 				:url => {:controller => 'contacts',  :action => 'index' }, 
-			    :with => "search") %>
+			    :with => "'department='+ escape($('department').value)+'&relationship='+ escape($('relationship').value)+'&search='+ escape($('search').value)") %>
 			
 			
+		</div>
+		<div class="live_search">
+			<%= l(:label_relationship) %>:
+		 	<%= select_tag :relationship, live_search_select_tag_options(@relationships)  %>
+			
+
+			<%= observe_field("relationship",  
+			    :update => 'contact_list', 
+				:url => {:controller => 'contacts',  :action => 'index' }, 
+			    :with => "'department='+ escape($('department').value)+'&relationship='+ escape($('relationship').value)+'&search='+ escape($('search').value)") %>
+		</div>
+		
+		<div class="live_search">
+			<%= l(:label_department) %>:
+		 	<%= select_tag :department, live_search_select_tag_options(@departments)  %>
+			
+
+			<%= observe_field("department",  
+			    :update => 'contact_list', 
+				:url => {:controller => 'contacts',  :action => 'index' }, 
+			    :with => "'department='+ escape($('department').value)+'&relationship='+ escape($('relationship').value)+'&search='+ escape($('search').value)") %>
 		</div>
 	</div>
 <% else %>
