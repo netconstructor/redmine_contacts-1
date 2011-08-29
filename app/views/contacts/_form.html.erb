@@ -1,7 +1,12 @@
 <%= error_messages_for 'contact' %>
 <!-- {:onclick=>"Element.show('edit_tags_form'); Element.hide('last_name');  return false;"} -->
 
-<div class = "box"> 
+<div class = "box">
+    <p><%= f.text_field :tag_list, :label =>l(:field_contact_tag_names), :size => "100%" %></p>
+    
+    <p><%= label_tag l(:label_relationship) %>  <%= f.collection_select :relationship_ids, @relationships, :id, :name, {}, { :selected => @contact.relationship_ids, :multiple => true } %></p>
+    <p><%= label_tag l(:label_department) %>  <%= f.collection_select :department_ids, @departments, :id, :name, {}, { :selected => @contact.department_ids, :multiple => true } %></p>
+    
 	<p class="avatar"><%= avatar_to(@contact, :size => "64") if @contact %></p>    
 	<p><%= label_tag l(:field_contact_avatar) %> <%= file_field_tag 'avatar[1][file]', :size => 30, :id => nil  -%>
 	<%= hidden_field_tag 'avatar[1][description]', 'avatar' -%> </p>
@@ -49,7 +54,6 @@
 	<p><%= label :contact, :birthday, l(:field_contact_birthday) %><%= date_select :contact, :birthday, :prompt => true, :start_year => Time.now.year - 100, :end_year => Time.now.year - 5 -%></p>
 	<p class  = "notes"><%= f.text_area :background , :cols => 80, :rows => 8, :class => 'wiki-edit', :label=>l(:field_contact_background)  %></p>
 	<%= wikitoolbar_for 'contact_background' %>
-	<p><%= f.text_field :tag_list, :label =>l(:field_contact_tag_names), :size => "100%" %></p>  
 
 	<p><%= f.select :assigned_to_id, (User.find(:all).collect {|m| [m.name, m.id]}), :include_blank => true, :label => l(:label_assigned_to) %></p> 
 </div>

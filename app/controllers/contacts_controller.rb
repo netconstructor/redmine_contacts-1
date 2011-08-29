@@ -92,10 +92,14 @@ class ContactsController < ApplicationController
   
   def edit
     #@contact = Contact.find_by_id(params[:id])
+    @departments = Department.find(:all)
+    @relationships = Relationship.find(:all)
   end
 
   def update
-    #@contact = Contact.find_by_id(params[:id])   
+    #@contact = Contact.find_by_id(params[:id])  
+    @departments = Department.find(:all)
+    @relationships = Relationship.find(:all)
     # debugger
     if @contact.update_attributes(params[:contact])
       flash[:notice] = l(:notice_successful_update)     
@@ -123,11 +127,15 @@ class ContactsController < ApplicationController
   
   def new
     @contact = Contact.new
+    @departments = Department.find(:all)
+    @relationships = Relationship.find(:all)
   end
 
   def create
     @contact = Contact.new(params[:contact])
     @contact.author = User.current
+    @departments = Department.find(:all)
+    @relationships = Relationship.find(:all)
     if @contact.save
       flash[:notice] = l(:notice_successful_create)
       if params[:avatar]    

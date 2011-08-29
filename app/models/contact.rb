@@ -11,6 +11,8 @@ class Contact < ActiveRecord::Base
   has_and_belongs_to_many :issues, :order => "#{Issue.table_name}.due_date", :uniq => true, :join_table => :rc_contacts_issues
   has_and_belongs_to_many :deals
   belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
+  has_and_belongs_to_many :departments, :join_table => :rc_contacts_departments
+  has_and_belongs_to_many :relationships, :join_table => :rc_contacts_relationships
   
   attr_accessor :phones     
   attr_accessor :emails 
@@ -27,7 +29,8 @@ class Contact < ActiveRecord::Base
                 :description => Proc.new {|o| o.notes }     
                                 
   # name or company is mandatory
-  validates_presence_of :first_name 
+  validates_presence_of :first_name
+  
   validates_uniqueness_of :first_name, :scope => [:last_name, :middle_name, :company]
 
   validates_numericality_of :customer_number, :allow_blank => true

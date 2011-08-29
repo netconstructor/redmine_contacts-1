@@ -88,7 +88,7 @@ module ContactsHelper
   end
 
   def skype_to(skype_name, name = nil)
-    return link_to skype_name, 'skype:' + skype_name + '?call' unless skype_name.blank?
+    return link_to(skype_name, 'skype:' + skype_name + '?call') unless skype_name.blank?
   end
   
   def contacts_paginator(paginator, page_options = {})
@@ -109,7 +109,7 @@ module ContactsHelper
   end
        
   def link_to_contact(contact) 
-    return link_to contact.name, contact_url(contact)
+    return link_to(contact.name, contact_url(contact))
   end
 
   def avatar_to(obj, options = { })  
