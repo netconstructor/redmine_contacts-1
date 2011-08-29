@@ -30,6 +30,9 @@ class Contact < ActiveRecord::Base
                                 
   # name or company is mandatory
   validates_presence_of :first_name
+  validate :has_department
+  validate :has_relationship
+  
   
   validates_uniqueness_of :first_name, :scope => [:last_name, :middle_name, :company]
 
@@ -81,6 +84,14 @@ class Contact < ActiveRecord::Base
     if @phones
       self.phone = @phones.uniq.map {|s| s.strip.delete(',').squeeze(" ")}.join(', ')
     end
+  end
+  
+  def has_department
+    self.errors.add(:department, "must have be specified") if self.departments.empty?
+  end
+  
+  def has_relationship
+    self.errors.add(:relationship, "must have be specified") if self.relationships.empty?
   end
   
 end
