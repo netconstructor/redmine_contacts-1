@@ -18,6 +18,12 @@
 				<% end %>
 			</div>
 			<div class="tags">
+			    <% contact.relationships.each do |rel| %>
+			        <span class="tag relationship"><a href="#"><%= rel.name %></a></span>
+			    <% end %>
+			    <% contact.departments.each do |dep| %>
+			        <span class="tag department"><a href="#"><%= dep.name %></a></span>
+			    <% end %>
 				<%= render :partial => "add_filtered_tag", :collection => contact.tags, :as => :tag %>
 			</div>
 	</div>
