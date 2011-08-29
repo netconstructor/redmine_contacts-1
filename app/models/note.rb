@@ -1,5 +1,6 @@
-class Note < ActiveRecord::Base   
+class Note < ActiveRecord::Base  
   unloadable
+  set_table_name "rc_notes"
   
   belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
   belongs_to :source, :polymorphic => true

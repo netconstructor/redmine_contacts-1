@@ -1,4 +1,5 @@
-class ContactsIssues < ActiveRecord::Base              
+class ContactsIssues < ActiveRecord::Base
+  set_table_name :rc_contacts_issues
   validates_presence_of :contact_id, :issue_id
   validates_uniqueness_of :contact_id, :scope => [:issue_id]                   
  

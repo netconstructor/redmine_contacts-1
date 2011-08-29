@@ -1,5 +1,6 @@
 class Contact < ActiveRecord::Base
   unloadable
+  set_table_name "rc_contacts"
 
   require 'acts-as-taggable-on'  
   acts_as_taggable
@@ -7,7 +8,7 @@ class Contact < ActiveRecord::Base
   has_many :projects
   has_many :notes, :as => :source, :dependent => :delete_all, :order => "created_on DESC" 
   belongs_to :assigned_to, :class_name => 'User', :foreign_key => 'assigned_to_id'    
-  has_and_belongs_to_many :issues, :order => "#{Issue.table_name}.due_date", :uniq => true   
+  has_and_belongs_to_many :issues, :order => "#{Issue.table_name}.due_date", :uniq => true, :join_table => :rc_contacts_issues
   has_and_belongs_to_many :deals
   belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
   

@@ -1,5 +1,6 @@
 class Deal < ActiveRecord::Base  
-  unloadable       
+  unloadable
+  set_table_name "rc_deals"
   
   STATUS_PENDING     = 0
   STATUS_WON         = 1
