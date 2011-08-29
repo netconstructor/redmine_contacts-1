@@ -9,35 +9,22 @@
 		<div class="live_search">
 			<%= l(:label_search) %>:
 		 	<%= text_field_tag(:search, params[:search], :autocomplete => "off", :size => "40", :class => "live_search_field" ) %>
-			
+			<%= select_tag :relationship, live_search_select_tag_options(@relationships)  %>
+		 	<%= select_tag :department, live_search_select_tag_options(@departments)  %>
+		 	
 
 			<%= observe_field("search",  
 			    :update => 'contact_list', 
 				:url => {:controller => 'contacts',  :action => 'index' }, 
 			    :with => "'department='+ escape($('department').value)+'&relationship='+ escape($('relationship').value)+'&search='+ escape($('search').value)") %>
-			
-			
-		</div>
-		<div class="live_search">
-			<%= l(:label_relationship) %>:
-		 	<%= select_tag :relationship, live_search_select_tag_options(@relationships)  %>
-			
-
-			<%= observe_field("relationship",  
-			    :update => 'contact_list', 
-				:url => {:controller => 'contacts',  :action => 'index' }, 
-			    :with => "'department='+ escape($('department').value)+'&relationship='+ escape($('relationship').value)+'&search='+ escape($('search').value)") %>
-		</div>
-		
-		<div class="live_search">
-			<%= l(:label_department) %>:
-		 	<%= select_tag :department, live_search_select_tag_options(@departments)  %>
-			
-
-			<%= observe_field("department",  
-			    :update => 'contact_list', 
-				:url => {:controller => 'contacts',  :action => 'index' }, 
-			    :with => "'department='+ escape($('department').value)+'&relationship='+ escape($('relationship').value)+'&search='+ escape($('search').value)") %>
+            <%= observe_field("relationship",  
+    			    :update => 'contact_list', 
+    				:url => {:controller => 'contacts',  :action => 'index' }, 
+    			    :with => "'department='+ escape($('department').value)+'&relationship='+ escape($('relationship').value)+'&search='+ escape($('search').value)") %>
+        	<%= observe_field("department",  
+        			    :update => 'contact_list', 
+        				:url => {:controller => 'contacts',  :action => 'index' }, 
+        			    :with => "'department='+ escape($('department').value)+'&relationship='+ escape($('relationship').value)+'&search='+ escape($('search').value)") %>			
 		</div>
 	</div>
 <% else %>
