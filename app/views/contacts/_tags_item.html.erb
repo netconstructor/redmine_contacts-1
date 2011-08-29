@@ -1,4 +1,4 @@
-<span class="tag">        
+<span class="tag <%= tag_css_class tag.name %>">        
 	<%- if !is_note -%>
 		<%= link_to tags_item.name, {:controller => "contacts", :action => "index", :tag => tags_item.name} %>
 	<%- else -%>

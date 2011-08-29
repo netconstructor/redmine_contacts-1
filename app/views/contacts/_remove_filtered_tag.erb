@@ -1,5 +1,5 @@
 <% if @filter_tags.size > 1 %>
-	<span class="tag"><a href="<%= contacts_tagged_path(@filter_tags.map(&:name) - tag.name.to_a) %>"><%= tag %><span class="tag_remove">x</span></a></span>	
+	<span class="tag <%= tag_css_class tag.name %>"><a href="<%= contacts_tagged_path(@filter_tags.map(&:name) - tag.name.to_a) %>"><%= tag %><span class="tag_remove">x</span></a></span>	
 <% else %>
-	<span class="tag"><a href="<%= contacts_path %>"><%= tag.name %><span class="tag_remove">x</span></a></span>
+	<span class="tag <%= tag_css_class tag.name %>"><a href="<%= contacts_path %>"><%= tag.name %><span class="tag_remove">x</span></a></span>
 <% end %>
