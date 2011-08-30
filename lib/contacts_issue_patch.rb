@@ -17,7 +17,7 @@ module ContactsIssuePatch
     # Same as typing in the class
     base.class_eval do    
       unloadable # Send unloadable so it will not be unloaded in development
-      has_and_belongs_to_many :contacts, :order => "last_name, first_name", :uniq => true
+      has_and_belongs_to_many :contacts, :order => "last_name, first_name", :uniq => true, :join_table => :rc_contacts_issues
     end  
     
     

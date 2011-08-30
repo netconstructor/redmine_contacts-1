@@ -1,8 +1,8 @@
+<h3><%= l(:label_issue_plural) %> </h3>   
 <% if @project%>
 <div class="contextual">
 	<p><%= link_to l(:label_issue_new), {}, :onclick => "Element.show('add_issue'); Element.hide(this);  return false;", :id => 'add_task_link' %></p>
 </div>
-<h3><%= l(:label_issue_plural) %> </h3>   
 
 <%= error_messages_for 'issue' %>    
 
