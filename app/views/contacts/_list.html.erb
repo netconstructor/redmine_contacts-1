@@ -19,10 +19,10 @@
 			</div>
 			<div class="tags">
 			    <% contact.relationships.each do |rel| %>
-			        <span class="tag relationship"><a href="#"><%= rel.name %></a></span>
+			        <span class="tag relationship <%= tag_css_class rel.name %>"><a href="#"><%= rel.name %></a></span>
 			    <% end %>
 			    <% contact.departments.each do |dep| %>
-			        <span class="tag department"><a href="#"><%= dep.name %></a></span>
+			        <span class="tag department <%= tag_css_class dep.name %>"><a href="#"><%= dep.name %></a></span>
 			    <% end %>
 				<%= render :partial => "add_filtered_tag", :collection => contact.tags, :as => :tag %>
 			</div>
