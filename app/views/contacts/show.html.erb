@@ -26,6 +26,8 @@
 				<% end %>
 				<div id="tags_data">
 					<span class="tags">
+					    <%= render :partial => "add_filtered_tag", :collection => @contact.departments, :as => :tag %>
+        			    <%= render :partial => "add_filtered_tag", :collection => @contact.relationships, :as => :tag %>
 						<%= render :partial => "add_filtered_tag", :collection => @contact.tags, :as => :tag %>
 					</span>
 					<% if authorize_for_global(:edit_contacts) %>

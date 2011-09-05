@@ -6,6 +6,8 @@ en:
   field_department: Department
   label_relationship: Relationship
   label_department: Department
+  label_departments_plural: Departments
+  label_relationships_plural: Relationship
   label_contacts_view_all: View all contacts
   label_contact_files: Files
   label_task_plural: Tasks

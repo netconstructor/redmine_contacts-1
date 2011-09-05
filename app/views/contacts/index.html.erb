@@ -40,6 +40,16 @@
 	<%= render :partial => 'common/sidebar' %>
     
 	
+    <h3><%= l(:label_departments_plural) %></h3>
+	<div id="departments">
+		<%= render :partial => "add_filtered_tag", :collection => @departments, :as => :tag %>
+	</div>
+	
+	<h3><%= l(:label_relationships_plural) %></h3>
+	<div id="relationships">
+		<%= render :partial => "add_filtered_tag", :collection => @relationships, :as => :tag %>
+	</div>
+	
 	<h3><%= l(:label_tags_plural) %></h3>
 	<div id="tags">
 		<%= render :partial => "add_filtered_tag", :collection => @other_tags, :as => :tag %>

@@ -30,8 +30,8 @@ class Contact < ActiveRecord::Base
                                 
   # name or company is mandatory
   validates_presence_of :first_name
-  validate :has_department
-  validate :has_relationship
+  validate :must_have_department
+  validate :must_have_relationship
   
   
   validates_uniqueness_of :first_name, :scope => [:last_name, :middle_name, :company]
@@ -39,6 +39,13 @@ class Contact < ActiveRecord::Base
   validates_numericality_of :customer_number, :allow_blank => true
   
   named_scope :by_last_name, :order => "last_name, first_name"
+  named_scope :with_relationship, lambda { |relationships|
+       { :joins => :relationships, :conditions => ['rc_contacts_relationships.relationship_id IN (?)', relationships.map(&:id)] }
+     }
+  named_scope :with_department, lambda { |departments|
+      { :joins => :departments, :conditions => ['rc_contacts_departments.department_id IN (?)', departments.map(&:id)] }
+    }
+  
   
   def visible?(usr=nil)
     (usr || User.current).allowed_to?(:view_contacts, nil, {:global => true})
@@ -86,11 +93,11 @@ class Contact < ActiveRecord::Base
     end
   end
   
-  def has_department
+  def must_have_department
     self.errors.add(:department, "must have be specified") if self.departments.empty?
   end
   
-  def has_relationship
+  def must_have_relationship
     self.errors.add(:relationship, "must have be specified") if self.relationships.empty?
   end
   

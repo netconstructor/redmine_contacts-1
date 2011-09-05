@@ -1,4 +1,6 @@
 <h2><%= "#{l(:label_contacts_tagged_with)}:" %>
+    <%= render :partial => "remove_filtered_tag", :collection => @filter_relationships, :as => :tag %>
+	<%= render :partial => "remove_filtered_tag", :collection => @filter_departments, :as => :tag %>
 	<%= render :partial => "remove_filtered_tag", :collection => @filter_tags, :as => :tag %>
 </h2>
 
@@ -9,6 +11,18 @@
 <% content_for :sidebar do %>          
 	<%= render :partial => 'common/sidebar' %>
     
+    
+    <h3><%= l(:label_departments_plural) %></h3>
+	<div id="departments">
+	    <%= render :partial => "remove_filtered_tag", :collection => @filter_departments, :as => :tag %>
+		<%= render :partial => "add_filtered_tag", :collection => @other_departments, :as => :tag %>
+	</div>
+	
+	<h3><%= l(:label_relationships_plural) %></h3>
+	<div id="relationships">
+	    <%= render :partial => "remove_filtered_tag", :collection => @filter_relationships, :as => :tag %>
+		<%= render :partial => "add_filtered_tag", :collection => @other_relationships, :as => :tag %>
+	</div>
 	
 	<h3><%= l(:label_tags_plural) %></h3>
 	<div id="tags">

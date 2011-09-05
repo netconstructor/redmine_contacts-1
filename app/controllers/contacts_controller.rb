@@ -6,7 +6,7 @@ class ContactsController < ApplicationController
   default_search_scope :contacts    
   
   before_filter :authorize_global, :except => [:contacts_notes, :contacts_issues, :close_issue, :assigned_to_users]
-  before_filter :find_contact, :except => [:index, :new, :create, :live_search, :contacts_notes, :close_issue, :contacts_issues, :destroy_note, :add_contact_to_issue, :tagged]
+  before_filter :find_contact, :except => [:index, :new, :create, :live_search, :contacts_notes, :close_issue, :contacts_issues, :destroy_note, :add_contact_to_issue, :filter]
  
   helper :attachments
   helper :contacts
@@ -69,26 +69,51 @@ class ContactsController < ApplicationController
     #@contacts = Contact.find(:all)
   end
   
-  def tagged
+  def filter
     
+    @filter_relationships = []
+    @filter_departments = []
     @filter_tags = []
-    params[:tags].each do |tag|
-      exists = Tag.find_by_name tag
-      if exists 
-        @filter_tags << exists
+
+    params[:filters].each do |tag|
+      if Department.find_by_name(tag)
+        @filter_departments << Department.find_by_name(tag)
+      elsif Relationship.find_by_name(tag)
+        @filter_relationships << Relationship.find_by_name(tag)
+      elsif Tag.find_by_name(tag)
+        @filter_tags << Tag.find_by_name(tag)
       else
         flash[:error] = t(:notice_tag_not_found, :tag => tag)
       end
-    end        
-
-    @contacts_pages = Paginator.new self, Contact.tagged_with(@filter_tags, :match_all => :true).count, 20, params[:page]     
-    @contacts = Contact.tagged_with(@filter_tags, {}).by_last_name.all(
-      :limit => @contacts_pages.items_per_page,
-      :offset =>  @contacts_pages.current.offset) || []
+    end
+    
+    @all_filters = @filter_relationships + @filter_departments + @filter_tags
+    
+    @contacts = Contact.by_last_name
+    if @filter_relationships.any?
+      @contacts = @contacts.with_relationship(@filter_relationships)
+    end
+    
+    if @filter_departments.any?
+      @contacts = @contacts.with_department(@filter_departments)
+    end
+    
+    if @filter_tags.any?
+      @contacts = @contacts.tagged_with(@filter_tags.map(&:name))
+    end
+        
+    @contacts_pages = Paginator.new self, @contacts.size, 20, params[:page]
+          
+    @contacts = @contacts.find(:all, 
+        :limit => @contacts_pages.items_per_page,
+        :offset =>  @contacts_pages.current.offset) || []             
     
     @last_notes = Note.recent_notes(@contacts)
     @all_tags = Contact.tag_counts
     @other_tags = @all_tags - @filter_tags #.delete_if { |tag| @filter_tags.include? tag.name }
+    @other_departments = Department.all - @filter_departments
+    @other_relationships = Relationship.all - @filter_relationships
+    
   end
   
   def edit
@@ -402,7 +427,7 @@ private
     end        
     
     if params[:tag]
-      cond = "(1 = 0)"
+      #cond = "(1 = 0)"
     end
     @deals = Deal.find(:all, :conditions => cond) || []
   end

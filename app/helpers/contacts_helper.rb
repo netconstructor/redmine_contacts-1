@@ -155,10 +155,11 @@ module ContactsHelper
     onclick << remote_function(:url => url, :method => :put, :with => "{ bucket: '#{bucket}' }")
   end
   
-  def tag_css_class(tag_name)
-    tag_name = tag_name.gsub(/\s/, '-').downcase
+  def tag_css_class(tag)
+    tag_name = tag.name.gsub(/\s/, '-').downcase
     tag_name = tag_name.gsub(/[^_0-9a-z-]/, '')
-    tag_name
+    tag_class = tag.class == ActsAsTaggableOn::Tag ? '' : tag.class.to_s.downcase + ' '
+    tag_class + tag_name
   end
   
 end
