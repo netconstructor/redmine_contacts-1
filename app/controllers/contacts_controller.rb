@@ -114,6 +114,9 @@ class ContactsController < ApplicationController
     @other_departments = Department.all - @filter_departments
     @other_relationships = Relationship.all - @filter_relationships
     
+    if request.xhr?
+      render :partial => "list", :layout => false, :locals => {:contacts => @contacts} 
+    end
   end
   
   def edit
