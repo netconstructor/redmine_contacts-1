@@ -20,7 +20,8 @@ Redmine::Plugin.register :contacts do
    
 
   permission :view_contacts, :contacts => [:show, 
-                                           :index, 
+                                           :index,
+                                           :filter,
                                            :live_search, 
                                            :contacts_notes, 
                                            :contacts_issues]
